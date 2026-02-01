@@ -12,6 +12,9 @@
 \usepackage{geometry}
 \geometry{margin=2.5cm}
 \usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue}
 \usepackage{enumitem}
@@ -46,7 +49,16 @@ Recommandation: Linux, Python 3.10+, gestion d'environnements virtuels, et bibli
 Rappels synthétiques sur l'algèbre linéaire, statistiques (espérance, variance, covariance), et optimisation convexe utiles à la modélisation de portefeuilles.
 
 \subsection{Notations}
-Vecteurs en gras, matrices en capitales, $\mathbb{E}[\cdot]$ pour l'espérance, $\mathrm{Var}(\cdot)$, $\mathrm{Cov}(\cdot,\cdot)$.
+Vecteurs en gras, matrices en capitales, $\mathbb{E}[\cdot]$ pour l'espérance, $\mathrm{Var}(\cdot)$, $\mathrm{Cov}(\cdot,\cdot)$. On note $n$ le nombre d'actifs, $w \in \mathbb{R}^n$ le vecteur de pondérations de portefeuille, $\mu \in \mathbb{R}^n$ le vecteur des rendements moyens, $\Sigma \in \mathbb{R}^{n\times n}$ la matrice de covariance.
+
+\subsection{Retours simples et logarithmiques}
+Pour un prix $P_t$, le \emph{retour simple} est $R_t = \frac{P_t - P_{t-1}}{P_{t-1}}$, et le \emph{retour logarithmique} est $r_t = \ln(P_t) - \ln(P_{t-1})$. Les retours log sont additifs dans le temps et souvent mieux comportés statistiquement.
+
+\subsection{Espérance et covariance}
+Pour un portefeuille $w$, le rendement espéré est $\mathbb{E}[R_p] = w^\top \mu$ et la variance est $\mathrm{Var}(R_p) = w^\top \Sigma w$. La racine de cette variance est l'écart-type (risque) du portefeuille.
+
+\subsection{Estimation pratique}
+On estime $\mu$ et $\Sigma$ à partir d'un historique de retours. Selon l'horizon et la fréquence, un annualis\'e peut s'appliquer: par exemple, avec des données journali\`eres $\hat{\mu}_{ann} = 252\,\hat{\mu}_{jour}$ et $\hat{\Sigma}_{ann} = 252\,\hat{\Sigma}_{jour}$.
 
 \section{Frontière efficiente (aperçu)}
 \subsection{Problème de Markowitz}
@@ -58,6 +70,17 @@ Approches analytiques (cas sans contraintes), optimisation quadratique numériqu
 \subsection{Interprétation}
 Compromis risque/rendement, portefeuilles tangents avec un actif sans risque, et sélection du portefeuille selon l'aversion au risque.
 
+\subsection{Variantes courantes}
+\begin{itemize}
+  \item Contraintes de \emph{no short-selling}: $w_i \ge 0$.
+  \item Bornes de poids: $l_i \le w_i \le u_i$ pour refl\'eter des limites d'exposition.
+  \item Co\^uts de transaction/sparse portfolios: pénalisations $\ell_1$ sur $w$.
+  \item Objectif Sharpe maximal: $\max_w \; \dfrac{w^\top (\mu - r_f \mathbf{1})}{\sqrt{w^\top \Sigma w}}$.
+\end{itemize}
+
+\subsection{Actif sans risque et droite du marché des capitaux}
+Avec un taux sans risque $r_f$, le portefeuille tangent $w_T$ maximise le ratio de Sharpe. Tout portefeuille optimal s'exprime comme combinaison lin\'eaire de l'actif sans risque et de $w_T$.
+
 \section{Flux de travail recommandé}
 \begin{enumerate}[label=\arabic*)]
   \item Préparer un jeu de données (prix/retours) propre et documenté.
@@ -65,6 +88,114 @@ Compromis risque/rendement, portefeuilles tangents avec un actif sans risque, et
   \item Poser et résoudre le problème d'optimisation.
   \item Tracer la frontière et exporter les résultats.
 \end{enumerate}
+
+\subsection{Détails pratiques}
+\begin{itemize}
+  \item Nettoyez les donn\'ees (valeurs manquantes, anomalies). Privil\'egiez des fen\^etres glissantes et testez la stabilit\'e de $\hat{\Sigma}$.
+  \item En cas de mauvaise condition de $\hat{\Sigma}$, utilisez une r\'egularisation (shrinkage de Ledoit--Wolf) ou des estimateurs robustes.
+  \item Pensez aux unit\'es: annualisation coh\'erente des retours et du risque.
+  \item Documentez les hypoth\`eses (horizon, fr\'equence, contraintes) avec le code.
+\end{itemize}
+
+\section{Esquisse num\'erique en Python}
+Cette section ne fournit pas de code source dans ce document, mais d\'ecrit un pipeline typique:
+\begin{enumerate}[label=\alph*)]
+  \item Import des prix (CSV) avec Pandas; calcul des retours log.
+  \item Estimation de $\mu$ et $\Sigma$ (annualis\'es si n\'ecessaire).
+  \item Pour une grille de cibles $r_*$, r\'esolution du QP: \emph{min} $w^\top\Sigma w$ s/c $\mu^\top w=r_*$, $\mathbf{1}^\top w=1$, $w\ge0$.
+  \item Trac\'e de $\sqrt{w^\top\Sigma w}$ (axe x) vs. $\mu^\top w$ (axe y).
+  \item Calcul du portefeuille tangent via maximisation du Sharpe et trac\'e de la droite du march\'e des capitaux.
+\end{enumerate}
+
+\paragraph{R\'e solution QP.} Utilisez SciPy (\texttt{minimize} avec contraintes) ou une biblioth\`eque QP (CVXOPT). Pour la stabilit\'e num\'erique, ajoutez une petite diagonale $\lambda I$ \`a $\hat{\Sigma}$ si n\'ecessaire.
+
+\section{Exemples de formules}
+\subsection{Ratio de Sharpe}
+Pour un portefeuille $w$ et un taux sans risque $r_f$:
+\[
+S(w) = \frac{w^\top (\mu - r_f\,\mathbf{1})}{\sqrt{w^\top \Sigma w}}.
+\]
+
+\subsection{Portefeuille cible avec Lagrangien}
+Le Lagrangien du probl\`eme \`a rendement cible est:
+\[
+\mathcal{L}(w, \alpha, \beta) = w^\top \Sigma w + \alpha\,(\mu^\top w - r_*) + \beta\,(\mathbf{1}^\top w - 1).
+\]
+Au point optimal (sans contrainte d'in\'egalit\'e), $2\Sigma w + \alpha\,\mu + \beta\,\mathbf{1} = 0$.
+
+\section{Exemple chiffr\'e (3 actifs)}
+\subsection{Donn\'ees}
+Consid\'erons un univers de 3 actifs avec rendements moyens annualis\'es et covariance:
+\[
+\mu = \begin{bmatrix} 0.12 \\ 0.10 \\ 0.07 \end{bmatrix},\qquad
+\Sigma = \begin{bmatrix}
+0.040 & 0.006 & 0.004 \\
+0.006 & 0.030 & 0.002 \\
+0.004 & 0.002 & 0.020
+\end{bmatrix}.
+\]
+
+Pour une cible $r_*$, la solution analytique (cas sans contrainte d'in\'egalit\'e) utilise $A=\mathbf{1}^\top\Sigma^{-1}\mathbf{1}$, $B=\mathbf{1}^\top\Sigma^{-1}\mu$, $C=\mu^\top\Sigma^{-1}\mu$, $D=AC-B^2$ et
+\[
+w(r_*) = \frac{C - B r_*}{D}\,\Sigma^{-1}\mathbf{1} + \frac{A r_* - B}{D}\,\Sigma^{-1}\mu.
+\]
+
+\subsection{Illustration de la fronti\`ere}
+Le trac\'e ci-dessous illustre qualitativement la fronti\`ere efficiente (rendement en fonction du risque). Les coordonn\'ees sont indicatives pour l'exemple pr\'ec\'edent.
+
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=0.9\linewidth,
+      height=6cm,
+      xlabel={Risque (écart-type)},
+      ylabel={Rendement attendu},
+      grid=both,
+      ymin=0.06, ymax=0.15,
+      xmin=0.06, xmax=0.16,
+      legend style={at={(0.02,0.98)},anchor=north west}
+    ]
+      % Courbe illustrative (points convexes croissants)
+      \addplot[blue, thick, mark=*] coordinates {
+        (0.07,0.070)
+        (0.08,0.082)
+        (0.09,0.095)
+        (0.10,0.108)
+        (0.11,0.120)
+        (0.125,0.132)
+        (0.140,0.142)
+      };
+      \addlegendentry{Fronti\`ere (illustrative)}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Fronti\`ere efficiente qualit\'ative pour l'exemple \`a 3 actifs.}
+\end{figure}
+
+\subsection{Tableau et figure g\'en\'er\'es par script}
+Le script Python \texttt{scripts/compute\_frontier.py} produit un tableau CSV et une figure PDF automatiquement inclus dans ce document (si g\'en\'er\'es avant compilation).
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\linewidth]{build/frontier_plot.pdf}
+  \caption{Fronti\`ere efficiente g\'en\'er\'ee num\'eriquement (exemple synth\'etique).}
+\end{figure}
+
+\paragraph{Points s\'electionn\'es.} Table format\'ee (si g\'en\'er\'ee par le script) pour cinq cibles $r_*$. 
+\IfFileExists{build/frontier_table.tex}{%
+  \begingroup
+  \small
+  \begin{center}
+  \begin{tabular}{lrrrrrr}
+    \hline
+    Cible $r_*$ & $\mu_p$ & $\sigma_p$ & $w_1$ & $w_2$ & $w_3$ & Sharpe \\
+    \hline
+    \input{build/frontier_table.tex}
+    \hline
+  \end{tabular}
+  \end{center}
+  \endgroup
+}{\textit{(Ex\`ecuter le script pour g\'en\'erer \texttt{build/frontier\_table.tex} puis re-compiler.)}}
 
 \section{Références}
 \begin{itemize}
