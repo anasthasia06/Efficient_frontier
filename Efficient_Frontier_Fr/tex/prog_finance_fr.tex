@@ -1,0 +1,76 @@
+% Programmation pour la Finance — Version française
+% Source de référence: prog_finance.pdf (ne pas modifier le PDF original)
+\documentclass[11pt,a4paper]{article}
+
+% Encodage & langue
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+
+% Maths & mise en page
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue}
+\usepackage{enumitem}
+
+% Titres
+\title{Programmation pour la Finance\\\large Version française (synthèse et traduction auteur)}
+\author{Cours d'origine: prog\_finance.pdf}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section*{Notice importante}
+\addcontentsline{toc}{section}{Notice importante}
+Cette version est une traduction/synthèse en français réalisée à partir du document de référence présent dans le dépôt: \texttt{prog\_finance.pdf}. Le PDF original n'est pas modifié.\newline
+\textbf{Objectif:} fournir un support francophone fidèle à l'esprit du cours, sans prétendre reproduire mot-à-mot l'intégralité du texte source.
+
+\paragraph{Méthode.} Nous extrayons la structure et les concepts, puis proposons une reformulation en français. En cas d'écarts d'interprétation, se référer au PDF original.
+
+\section{Introduction}
+Cette section présente le contexte du cours et les objectifs d'apprentissage en programmation appliquée à la finance: environnement Python, manipulation de données financières, et mise en œuvre d'algorithmes classiques (p. ex. frontière efficiente).
+
+\subsection{Prérequis}
+Compétences de base en Python, calcul matriciel, et notions d'optimisation.
+
+\subsection{Environnement de travail}
+Recommandation: Linux, Python 3.10+, gestion d'environnements virtuels, et bibliothèques usuelles (NumPy, Pandas, Matplotlib, CVXOPT/Scipy selon besoins).
+
+\section{Fondamentaux mathématiques}
+Rappels synthétiques sur l'algèbre linéaire, statistiques (espérance, variance, covariance), et optimisation convexe utiles à la modélisation de portefeuilles.
+
+\subsection{Notations}
+Vecteurs en gras, matrices en capitales, $\mathbb{E}[\cdot]$ pour l'espérance, $\mathrm{Var}(\cdot)$, $\mathrm{Cov}(\cdot,\cdot)$.
+
+\section{Frontière efficiente (aperçu)}
+\subsection{Problème de Markowitz}
+Formulation quadratique: minimiser la variance $w^\top \Sigma w$ pour un rendement cible $\mu^\top w = r_*$, avec $\sum_i w_i = 1$ et contraintes éventuelles $w_i \ge 0$.
+
+\subsection{Méthodes de résolution}
+Approches analytiques (cas sans contraintes), optimisation quadratique numérique, et tracé de la frontière par balayage des rendements cibles.
+
+\subsection{Interprétation}
+Compromis risque/rendement, portefeuilles tangents avec un actif sans risque, et sélection du portefeuille selon l'aversion au risque.
+
+\section{Flux de travail recommandé}
+\begin{enumerate}[label=\arabic*)]
+  \item Préparer un jeu de données (prix/retours) propre et documenté.
+  \item Calculer rendements, moyenne vectorielle $\mu$ et matrice de covariance $\Sigma$.
+  \item Poser et résoudre le problème d'optimisation.
+  \item Tracer la frontière et exporter les résultats.
+\end{enumerate}
+
+\section{Références}
+\begin{itemize}
+  \item PDF source: \texttt{prog\_finance.pdf} (dans le dépôt).
+  \item Markowitz, H. (1952). Portfolio Selection.
+  \item Outils Python: documentation NumPy, Pandas, SciPy.
+\end{itemize}
+
+\end{document}
