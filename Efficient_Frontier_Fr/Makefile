@@ -2,7 +2,7 @@
 
 TEX=tex/prog_finance_fr.tex
 OUTDIR=build
-PDF=$(OUTDIR)/prog_finance_fr.pdf
+PDF=$(OUTDIR)/prog_finance_fr_v2.pdf
 ENGINE?=pdflatex
 ASSETS_SCRIPT=scripts/compute_frontier.py
 

@@ -72,7 +72,7 @@ with open(csv_path, "w") as f:
 tex_rows_path = os.path.join(BUILD, "frontier_table.tex")
 with open(tex_rows_path, "w") as f:
     for r_star, ret, std, w1, w2, w3, s in sel_rows:
-        f.write(f"{r_star:.4f} & {ret:.4f} & {std:.4f} & {w1:.4f} & {w2:.4f} & {w3:.4f} & {s:.4f} \\\n")
+        f.write(f"{r_star:.4f} & {ret:.4f} & {std:.4f} & {w1:.4f} & {w2:.4f} & {w3:.4f} & {s:.4f} \\\\ \n")
 
 # Plot and save as PDF
 fig, ax = plt.subplots(figsize=(6,4))
