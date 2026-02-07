@@ -446,7 +446,6 @@ def calculate_var(
     z_alpha = norm.ppf(confidence_level)
     return -(portfolio_return - z_alpha * portfolio_volatility) * np.sqrt(horizon)
 
-
 def calculate_cvar(
     portfolio_return: float,
     portfolio_volatility: float,
@@ -470,8 +469,8 @@ def calculate_cvar(
     from scipy.stats import norm
     z_alpha = norm.ppf(confidence_level)
     phi = norm.pdf(z_alpha)
-    return -(portfolio_return - portfolio_volatility * phi / (1 - confidence_level))
-
+    cvar = -(portfolio_return - portfolio_volatility * phi / (1 - confidence_level))
+    return float(cvar)
 
 def calculate_statistical_moments(returns: NDArray[np.float64]) -> Dict[str, float]:
     """

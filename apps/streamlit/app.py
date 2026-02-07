@@ -103,48 +103,95 @@ def init_session_state():
     if 'selected_assets' not in st.session_state:
         st.session_state.selected_assets = []
 
+@st.cache_data(show_spinner=False)
+def load_market_data(
+    tickers: List[str],
+    start_date: datetime,
+    end_date: datetime
+) -> Optional[pd.DataFrame]:
+    """
+    Charge les données Yahoo Finance de manière robuste.
+    Compatible mono/multi tickers + nouvelles versions yfinance.
+    """
 
-def load_market_data(tickers: List[str], start_date: datetime, end_date: datetime) -> Optional[pd.DataFrame]:
-    """
-    Charge les données de marché depuis Yahoo Finance.
-    
-    Args:
-        tickers: Liste des symboles boursiers
-        start_date: Date de début
-        end_date: Date de fin
-        
-    Returns:
-        DataFrame des prix ajustés
-    """
     try:
         with st.spinner("Chargement des données de marché..."):
-            data = yf.download(tickers, start=start_date, end=end_date)['Adj Close']
-            if isinstance(data, pd.Series):
-                data = data.to_frame()
-            return data.dropna()
+            data = pd.DataFrame()
+            data = pd.DataFrame(yf.download(tickers,
+                               start=start_date,
+                               end=end_date,
+                               auto_adjust=False,
+                               progress=False,
+                               group_by="column"
+            ))
+
+            if data.empty:
+                st.error("Aucune donnée récupérée depuis Yahoo Finance.")
+                return None
+
+            # -----------------------------
+            # CAS 1 : plusieurs tickers
+            # -----------------------------
+            if isinstance(data.columns, pd.MultiIndex):
+
+                # Si Adj Close existe → on le prend
+                if "Adj Close" in data.columns.get_level_values(0):
+                    prices = data["Adj Close"]
+
+                # Sinon fallback sur Close
+                elif "Close" in data.columns.get_level_values(0):
+                    st.warning("Adj Close indisponible → utilisation de Close.")
+                    prices = data["Close"]
+
+                else:
+                    st.error("Ni 'Adj Close' ni 'Close' disponibles.")
+                    return None
+
+            # -----------------------------
+            # CAS 2 : 1 seul ticker
+            # -----------------------------
+            else:
+                prices = pd.DataFrame()
+                if "Adj Close" in data.columns:
+                    prices = data[["Adj Close"]]
+                elif "Close" in data.columns:
+                    st.warning("Adj Close indisponible → utilisation de Close.")
+                    prices = data[["Close"]]
+                else:
+                    st.error("Colonnes de prix introuvables.")
+                    return None
+
+            prices = prices.dropna()
+
+            if prices.empty:
+                st.error("Les données sont vides après nettoyage.")
+                return None
+
+            return pd.DataFrame(prices)
+
     except Exception as e:
-        st.error(f"Erreur lors du chargement des données: {e}")
+        st.error(f"Erreur Yahoo Finance : {str(e)}")
         return None
 
 
 def create_efficient_frontier_plot(frontier, risk_free_rate: float) -> go.Figure:
     """
     Crée le graphique de la frontière efficiente.
-    
+
     Args:
         frontier: Objet EfficientFrontier
         risk_free_rate: Taux sans risque
-        
+
     Returns:
         Figure Plotly
     """
     fig = go.Figure()
-    
+
     # Frontière efficiente
     risks = [p.portfolio_risk * 100 for p in frontier.points]
     returns = [p.portfolio_return * 100 for p in frontier.points]
     sharpes = [p.sharpe_ratio for p in frontier.points]
-    
+
     fig.add_trace(go.Scatter(
         x=risks,
         y=returns,
@@ -155,7 +202,7 @@ def create_efficient_frontier_plot(frontier, risk_free_rate: float) -> go.Figure
                    colorbar=dict(title='Sharpe')),
         hovertemplate='Risque: %{x:.2f}%<br>Rendement: %{y:.2f}%<extra></extra>'
     ))
-    
+
     # Portefeuille de variance minimale
     min_var = frontier.min_variance_portfolio
     fig.add_trace(go.Scatter(
@@ -166,7 +213,7 @@ def create_efficient_frontier_plot(frontier, risk_free_rate: float) -> go.Figure
         marker=dict(size=15, color='#64ffda', symbol='diamond'),
         hovertemplate='Min Variance<br>σ: %{x:.2f}%<br>μ: %{y:.2f}%<extra></extra>'
     ))
-    
+
     # Portefeuille tangent (max Sharpe)
     max_sharpe = frontier.max_sharpe_portfolio
     fig.add_trace(go.Scatter(
@@ -178,11 +225,11 @@ def create_efficient_frontier_plot(frontier, risk_free_rate: float) -> go.Figure
         hovertemplate='Max Sharpe<br>σ: %{x:.2f}%<br>μ: %{y:.2f}%<br>Sharpe: ' + 
                      f'{max_sharpe.sharpe_ratio:.3f}<extra></extra>'
     ))
-    
+
     # Capital Market Line
     max_risk = max(risks) * 1.2
     cml_returns = [risk_free_rate * 100 + max_sharpe.sharpe_ratio * r for r in np.linspace(0, max_risk, 50)]
-    
+
     fig.add_trace(go.Scatter(
         x=list(np.linspace(0, max_risk, 50)),
         y=cml_returns,
@@ -190,7 +237,7 @@ def create_efficient_frontier_plot(frontier, risk_free_rate: float) -> go.Figure
         name='Capital Market Line',
         line=dict(color='#ffd93d', width=2, dash='dash'),
     ))
-    
+
     fig.update_layout(
         title=dict(text='Frontière Efficiente - Modèle de Markowitz', font=dict(size=20)),
         xaxis_title='Risque (σ) %',
@@ -201,14 +248,14 @@ def create_efficient_frontier_plot(frontier, risk_free_rate: float) -> go.Figure
         legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01),
         hovermode='closest'
     )
-    
+
     return fig
 
 
 def create_weights_plot(weights: np.ndarray, asset_names: List[str], title: str) -> go.Figure:
     """Crée un graphique en barres des allocations."""
     colors = ['#e94560' if w >= 0 else '#64ffda' for w in weights]
-    
+
     fig = go.Figure(go.Bar(
         x=asset_names,
         y=weights * 100,
@@ -225,7 +272,7 @@ def create_weights_plot(weights: np.ndarray, asset_names: List[str], title: str)
         paper_bgcolor='#16213e',
         plot_bgcolor='#1a1a2e',
     )
-    
+
     return fig
 
 
@@ -278,14 +325,19 @@ def main():
             with col2:
                 end_date = st.date_input("Fin", datetime.now())
             
+            # Dans la sidebar, section Yahoo Finance, modifiez le bouton "Charger les données" :
+
             if st.button("📥 Charger les données", type="primary"):
-                prices = load_market_data(tickers, start_date, end_date)
+                # Convertir date en datetime
+                start_datetime = datetime.combine(start_date, datetime.min.time())
+                end_datetime = datetime.combine(end_date, datetime.min.time())
+                
+                prices = load_market_data(tickers, start_datetime, end_datetime)
                 if prices is not None:
                     st.session_state.prices_df = prices
                     st.session_state.returns_df = prices.pct_change().dropna()
                     st.session_state.selected_assets = list(prices.columns)
                     st.success(f"✅ {len(prices)} observations chargées")
-        
         else:
             # Données synthétiques
             st.subheader("Configuration synthétique")
@@ -377,7 +429,10 @@ def main():
                     template='plotly_dark',
                     paper_bgcolor='#16213e',
                 )
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(
+    fig,
+    config={"responsive": True}
+)
             
             # Distribution des rendements
             st.subheader("📊 Distribution des Rendements")
@@ -403,7 +458,10 @@ def main():
                 plot_bgcolor='#1a1a2e',
                 showlegend=False
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(
+    fig,
+    config={"responsive": True}
+)
         
         else:
             st.info("👆 Veuillez charger des données dans la barre latérale pour commencer.")
@@ -437,7 +495,10 @@ def main():
                 
                 # Graphique principal
                 fig = create_efficient_frontier_plot(frontier, risk_free_rate)
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(
+    fig,
+    config={"responsive": True}
+)
                 
                 # Métriques clés
                 col1, col2, col3 = st.columns(3)
@@ -484,7 +545,10 @@ def main():
                 """)
                 
                 fig = create_weights_plot(min_var.weights, assets, "Allocations - Min Variance")
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(
+    fig,
+    config={"responsive": True}
+)
             
             with col2:
                 st.subheader("⭐ Portefeuille Tangent (Max Sharpe)")
@@ -500,7 +564,10 @@ def main():
                 """)
                 
                 fig = create_weights_plot(max_sharpe.weights, assets, "Allocations - Max Sharpe")
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(
+    fig,
+    config={"responsive": True}
+)
             
             # Comparaison
             st.subheader("📊 Comparaison des Portefeuilles")
