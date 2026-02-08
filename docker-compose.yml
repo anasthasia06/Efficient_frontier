@@ -1,7 +1,7 @@
 # Portfolio Optimizer - Docker Compose
 # Orchestration des conteneurs pour les applications mobile et desktop
 
-version: '3.9'
+ 
 
 services:
   # ============================================

@@ -47,4 +47,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:19000 || exit 1
 
 # Commande de démarrage
-CMD ["npx", "expo", "start", "--tunnel"]
+# Utiliser le mode LAN pour exposer correctement les ports dans le conteneur
+CMD ["npx", "expo", "start", "--lan"]
