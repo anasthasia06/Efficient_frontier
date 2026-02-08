@@ -190,30 +190,30 @@ def optimize_min_variance(
         PortfolioMetrics du portefeuille optimal
     """
     n_assets = len(expected_returns)
-    
+
     # Fonction objectif: variance du portefeuille
     def portfolio_variance(weights: NDArray) -> float:
         return np.dot(weights, np.dot(cov_matrix, weights))
-    
+
     # Contrainte: somme des poids = 1
     constraints = [{'type': 'eq', 'fun': lambda w: np.sum(w) - 1}]
-    
+
     # Contrainte de rendement cible si spécifiée
     if target_return is not None:
         constraints.append({
             'type': 'eq',
             'fun': lambda w: np.dot(w, expected_returns) - target_return
         })
-    
+
     # Bornes des poids
     if allow_short_selling:
         bounds = tuple((min_weight, max_weight) for _ in range(n_assets))
     else:
         bounds = tuple((max(0, min_weight), max_weight) for _ in range(n_assets))
-    
+ 
     # Point de départ: répartition équipondérée
     initial_weights = np.ones(n_assets) / n_assets
-    
+ 
     # Optimisation
     result = minimize(
         portfolio_variance,
@@ -222,13 +222,13 @@ def optimize_min_variance(
         bounds=bounds,
         constraints=constraints
     )
-    
+ 
     if not result.success:
         # Fallback: retourner le portefeuille équipondéré
         return calculate_portfolio_metrics(
             initial_weights, expected_returns, cov_matrix, risk_free_rate
         )
-    
+ 
     return calculate_portfolio_metrics(
         result.x, expected_returns, cov_matrix, risk_free_rate
     )
@@ -244,13 +244,13 @@ def optimize_max_sharpe(
 ) -> PortfolioMetrics:
     """
     Trouve le portefeuille tangent (maximum ratio de Sharpe).
-    
+ 
     Point 9-10 du document:
-    
+ 
     max  (w'μ - r_f) / √(w'Σw)
     s.t. Σw_i = 1
          w_min ≤ w_i ≤ w_max
-    
+ 
     Args:
         expected_returns: Vecteur des rendements espérés
         cov_matrix: Matrice de covariance
@@ -258,12 +258,12 @@ def optimize_max_sharpe(
         allow_short_selling: Autoriser les ventes à découvert
         min_weight: Poids minimum
         max_weight: Poids maximum
-        
+ 
     Returns:
         PortfolioMetrics du portefeuille tangent
     """
     n_assets = len(expected_returns)
-    
+ 
     # Fonction objectif: négatif du Sharpe (on minimise)
     def neg_sharpe(weights: NDArray) -> float:
         port_return = np.dot(weights, expected_returns)
@@ -271,19 +271,19 @@ def optimize_max_sharpe(
         if port_vol == 0:
             return 0
         return -(port_return - risk_free_rate) / port_vol
-    
+ 
     # Contraintes
     constraints = [{'type': 'eq', 'fun': lambda w: np.sum(w) - 1}]
-    
+ 
     # Bornes
     if allow_short_selling:
         bounds = tuple((min_weight, max_weight) for _ in range(n_assets))
     else:
         bounds = tuple((max(0, min_weight), max_weight) for _ in range(n_assets))
-    
+ 
     # Optimisation
     initial_weights = np.ones(n_assets) / n_assets
-    
+ 
     result = minimize(
         neg_sharpe,
         initial_weights,
@@ -291,7 +291,7 @@ def optimize_max_sharpe(
         bounds=bounds,
         constraints=constraints
     )
-    
+ 
     return calculate_portfolio_metrics(
         result.x if result.success else initial_weights,
         expected_returns,
@@ -311,12 +311,12 @@ def compute_efficient_frontier(
 ) -> EfficientFrontier:
     """
     Calcule la frontière efficiente complète.
-    
+ 
     Point 11 du document: Frontière efficiente
-    
+ 
     Pour chaque rendement cible entre min et max, trouve le portefeuille
     de variance minimale.
-    
+ 
     Args:
         expected_returns: Vecteur des rendements espérés
         cov_matrix: Matrice de covariance
@@ -325,7 +325,7 @@ def compute_efficient_frontier(
         allow_short_selling: Autoriser les ventes à découvert
         min_weight: Poids minimum
         max_weight: Poids maximum
-        
+ 
     Returns:
         EfficientFrontier avec tous les points et portefeuilles clés
     """
@@ -336,11 +336,11 @@ def compute_efficient_frontier(
     else:
         min_return = np.min(expected_returns)
         max_return = np.max(expected_returns)
-    
+ 
     target_returns = np.linspace(min_return, max_return, num_points)
-    
+ 
     points: List[EfficientFrontierPoint] = []
-    
+ 
     for target in target_returns:
         try:
             portfolio = optimize_min_variance(
