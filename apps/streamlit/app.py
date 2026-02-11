@@ -43,6 +43,7 @@ from core.optimization import (
     calculate_statistical_moments
 )
 
+
 # Configuration de la page
 st.set_page_config(
     page_title="Portfolio Optimizer - Markowitz",
@@ -284,6 +285,8 @@ def main():
     st.markdown('<p class="main-header">📈 Portfolio Optimizer</p>', unsafe_allow_html=True)
     st.markdown('<p class="sub-header">Optimisation de Portefeuille - Théorie Moderne de Markowitz</p>', 
                 unsafe_allow_html=True)
+
+    # Mode OOP désactivé pour le test: utilisez app_oop.py pour lancer l'OOP
     
     # Sidebar - Configuration
     with st.sidebar:
