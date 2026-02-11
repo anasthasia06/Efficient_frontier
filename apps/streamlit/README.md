@@ -33,6 +33,21 @@ docker-compose up streamlit
 # Accéder à http://localhost:8501
 ```
 
+## ⚙️ Lancement via VS Code (Tâches)
+
+Démarrez Streamlit facilement depuis VS Code (`Ctrl+Shift+P` → `Tasks: Run Task`).
+
+- `Docker: Build All` : construit toutes les images Docker
+- `Docker: Start All` : démarre les services (incluant Streamlit) en conteneurs
+- `Docker: Stop All` : arrête tous les services
+- `Streamlit: Run` : lance Streamlit en local (hors Docker) dans `apps/streamlit`
+
+Accès:
+- Application: http://localhost:8501
+
+Pour les détails complets Docker Compose (services, ports, commandes), voir la section "Lancement des Versions (Docker Compose)" du README racine : [Efficient_frontier/README.md](Efficient_frontier/README.md)
+
+
 ## 📁 Structure
 
 ```

@@ -100,6 +100,20 @@ docker-compose down
 - Le conteneur expose `19000/19001/19002` et `8081`. Assurez-vous que votre appareil (ou émulateur) est joignable sur le même réseau que votre machine.
 - En cas de difficultés de connexion depuis un appareil physique, privilégiez un émulateur (Android Emulator / iOS Simulator) ou le mode tunnel d’Expo.
 
+## ⚙️ Lancement via VS Code (Tâches)
+
+Vous pouvez démarrer les versions directement depuis VS Code avec les tâches configurées.
+
+- Ouvrir la palette de commandes: `Ctrl+Shift+P` → `Tasks: Run Task`
+- Choisir l’une des tâches:
+   - `Docker: Build All` : construit toutes les images
+   - `Docker: Start All` : démarre Streamlit et Mobile en conteneurs
+   - `Docker: Stop All` : arrête tous les services
+   - `Streamlit: Run` : lance Streamlit en local (hors Docker) dans `apps/streamlit`
+   - `Mobile: Start Expo` : lance Expo en local (hors Docker) dans `apps/mobile`
+
+Astuce: vous pouvez aussi utiliser le menu Terminal → Run Task… pour retrouver ces commandes.
+
 ## 🚀 Démarrage Rapide
 
 ### Prérequis

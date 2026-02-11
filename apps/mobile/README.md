@@ -27,6 +27,22 @@ npx expo start
 docker-compose up mobile
 ```
 
+## ⚙️ Lancement via VS Code (Tâches)
+
+Vous pouvez démarrer cette application directement depuis VS Code via la palette de commandes (`Ctrl+Shift+P` → `Tasks: Run Task`).
+
+- `Docker: Build All` : construit toutes les images Docker du projet
+- `Docker: Start All` : démarre les services (incluant Mobile) en conteneurs
+- `Docker: Stop All` : arrête tous les services
+- `Mobile: Start Expo` : lance Expo en local (hors Docker) dans `apps/mobile`
+
+Accès rapide:
+- Expo DevTools: http://localhost:19002
+- Metro bundler: http://localhost:8081
+
+Pour les détails complets Docker Compose (services, ports, commandes), voir la section "Lancement des Versions (Docker Compose)" du README racine : [Efficient_frontier/README.md](Efficient_frontier/README.md)
+
+
 ## 📁 Structure
 
 ```
