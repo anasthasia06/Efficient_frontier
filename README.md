@@ -18,6 +18,19 @@ Ce projet propose deux applications complémentaires pour les gestionnaires de p
    - Optimisation paramétrable
    - Mesures de risque avancées (VaR, CVaR)
 
+## 🧭 Sommaire
+- [Architecture du Projet](#architecture-du-projet)
+- [Lancement des Versions (Docker Compose)](#lancement-des-versions-docker-compose)
+- [Démarrage Rapide](#demarrage-rapide)
+- [Lancement via VS Code (Tâches)](#lancement-via-vs-code-taches)
+- [Cheat Sheet Lancement](#cheat-sheet-lancement)
+- [Fonctionnalités](#fonctionnalites)
+- [Théorie Mathématique](#theorie-mathematique)
+- [Commandes Docker](#commandes-docker)
+- [Collaboration](#collaboration)
+- [Références](#references)
+- [Licence](#licence)
+
 ## 📦 Architecture du Projet
 
 ```
