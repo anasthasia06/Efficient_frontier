@@ -221,4 +221,4 @@ Ce projet est développé dans le cadre du cours "Programmation pour la Finance"
 
 ---
 
-**Développé avec ❤️ pour l'optimisation de portefeuille**
+**Développé par Anasthasia Daunes et Charly-Romy TANGA ING3 FINTECH  pour la programmation pour la finance l'optimisation de portefeuille**

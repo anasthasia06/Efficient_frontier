@@ -687,8 +687,7 @@ def main():
         
         st.markdown("""
         ---
-        **Référence:** Document `prog_finance.pdf` - Programmation pour la Finance
-        """)
+        **Référence:** Document `prog_finance.pdf` - Programmation pour la Finance.        """)
 
 
 if __name__ == "__main__":
