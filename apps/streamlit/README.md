@@ -1,15 +1,18 @@
-# 💻 Portfolio Optimizer - Application Streamlit
+# 🧮💻 Portfolio Optimizer - Application Streamlit
 
 Application desktop avancée pour l'optimisation de portefeuille basée sur le modèle de Markowitz.
 
-## 🚀 Démarrage
+## ⚡ Démarrage
+<a id="demarrage"></a>
 
-### Prérequis
+### 🔧 Prérequis
+<a id="prerequis"></a>
 
 - Python 3.10+
 - pip
 
-### Installation
+### 🧑‍💻 Installation
+<a id="installation"></a>
 
 ```bash
 # Créer un environnement virtuel
@@ -24,7 +27,8 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-### Avec Docker
+### 🐳 Avec Docker
+<a id="avec-docker"></a>
 
 ```bash
 # Depuis la racine du projet
@@ -48,7 +52,8 @@ Accès:
 Pour les détails complets Docker Compose (services, ports, commandes), voir la section "Lancement des Versions (Docker Compose)" du README racine : [Efficient_frontier/README.md](Efficient_frontier/README.md)
 
 
-## 📁 Structure
+## 🗂️ Structure
+<a id="structure"></a>
 
 ```
 streamlit/
@@ -62,9 +67,11 @@ streamlit/
 └── requirements.txt
 ```
 
-## 🎯 Fonctionnalités
+## 🧩 Fonctionnalités
+<a id="fonctionnalites"></a>
 
-### Onglets
+### 🧱 Onglets
+<a id="onglets"></a>
 
 1. **Analyse des Données**
    - Statistiques descriptives (μ, σ, Sharpe, Skewness, Kurtosis)
@@ -89,12 +96,14 @@ streamlit/
    - Documentation mathématique intégrée
    - Formules LaTeX
 
-## 📊 Sources de Données
+## 🗃️ Sources de Données
+<a id="sources-de-donnees"></a>
 
 - **Yahoo Finance** : Données de marché en temps réel
 - **Données synthétiques** : Mode démo pour les tests
 
 ## 🧮 Module d'Optimisation
+<a id="module-d-optimisation"></a>
 
 Le module `core/optimization.py` implémente :
 

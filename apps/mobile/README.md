@@ -1,16 +1,19 @@
-# 📱 Portfolio Optimizer - Application Mobile
+# 🧮📱 Portfolio Optimizer - Application Mobile
 
 Application React Native / Expo pour l'optimisation de portefeuille.
 
-## 🚀 Démarrage
+## ⚡ Démarrage
+<a id="demarrage"></a>
 
-### Prérequis
+### 🔧 Prérequis
+<a id="prerequis"></a>
 
 - Node.js 18+
 - npm ou yarn
 - [Expo Go](https://expo.dev/client) sur votre téléphone
 
-### Installation
+### 🧑‍💻 Installation
+<a id="installation"></a>
 
 ```bash
 # Installer les dépendances
@@ -20,7 +23,8 @@ npm install
 npx expo start
 ```
 
-### Avec Docker
+### 🐳 Avec Docker
+<a id="avec-docker"></a>
 
 ```bash
 # Depuis la racine du projet
@@ -43,7 +47,8 @@ Accès rapide:
 Pour les détails complets Docker Compose (services, ports, commandes), voir la section "Lancement des Versions (Docker Compose)" du README racine : [Efficient_frontier/README.md](Efficient_frontier/README.md)
 
 
-## 📁 Structure
+## 🗂️ Structure
+<a id="structure"></a>
 
 ```
 app/
@@ -68,13 +73,15 @@ src/
     └── portfolio.ts
 ```
 
-## 🎨 Design
+## 💻 Design
+<a id="design"></a>
 
 - Thème sombre moderne
 - Couleurs : `#1a1a2e`, `#16213e`, `#e94560`, `#64ffda`
 - Charts avec `react-native-chart-kit`
 
-## 📱 Compte de démonstration
+## 🔐 Compte de démonstration
+<a id="compte-de-demonstration"></a>
 
 ```
 Email: demo@portfolio.com

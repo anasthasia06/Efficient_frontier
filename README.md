@@ -1,8 +1,8 @@
-# 📈 Portfolio Optimizer - Démonstrateur Optimisation de Portefeuille
+# 🧮💻 Portfolio Optimizer - Démonstrateur Optimisation de Portefeuille
 
 Application complète pour l'optimisation de portefeuille basée sur le **modèle de Markowitz** et les 14 points du document de référence `prog_finance_fr_v2.pdf`.
 
-## 🎯 Objectif
+## 🧠 Objectif
 
 Ce projet propose deux applications complémentaires pour les gestionnaires de portefeuille :
 
@@ -18,7 +18,7 @@ Ce projet propose deux applications complémentaires pour les gestionnaires de p
    - Optimisation paramétrable
    - Mesures de risque avancées (VaR, CVaR)
 
-## 🧭 Sommaire
+## 🧾 Sommaire
 - [Architecture du Projet](#architecture-du-projet)
 - [Lancement des Versions (Docker Compose)](#lancement-des-versions-docker-compose)
 - [Démarrage Rapide](#demarrage-rapide)
@@ -31,7 +31,8 @@ Ce projet propose deux applications complémentaires pour les gestionnaires de p
 - [Références](#references)
 - [Licence](#licence)
 
-## 📦 Architecture du Projet
+## 🗂️ Architecture du Projet
+<a id="architecture-du-projet"></a>
 
 ```
 Efficient_frontier/
@@ -62,7 +63,8 @@ Efficient_frontier/
 └── README.md
 ```
 
-## 🚀 Lancement des Versions (Docker Compose)
+## 🐳 Lancement des Versions (Docker Compose)
+<a id="lancement-des-versions-docker-compose"></a>
 
 Les deux applications (Desktop Streamlit et Mobile Expo) sont packagées dans des conteneurs Docker et orchestrées via `docker-compose`. Cela permet un lancement homogène, sans installer Node/Expo ou Python localement.
 
@@ -113,7 +115,8 @@ docker-compose down
 - Le conteneur expose `19000/19001/19002` et `8081`. Assurez-vous que votre appareil (ou émulateur) est joignable sur le même réseau que votre machine.
 - En cas de difficultés de connexion depuis un appareil physique, privilégiez un émulateur (Android Emulator / iOS Simulator) ou le mode tunnel d’Expo.
 
-## ⚙️ Lancement via VS Code (Tâches)
+## 🧑‍💻 Lancement via VS Code (Tâches)
+<a id="lancement-via-vs-code-taches"></a>
 
 Vous pouvez démarrer les versions directement depuis VS Code avec les tâches configurées.
 
@@ -127,7 +130,8 @@ Vous pouvez démarrer les versions directement depuis VS Code avec les tâches c
 
 Astuce: vous pouvez aussi utiliser le menu Terminal → Run Task… pour retrouver ces commandes.
 
-## 📝 Cheat Sheet Lancement
+## 🧾 Cheat Sheet Lancement
+<a id="cheat-sheet-lancement"></a>
 
 ### Docker global
 ```bash
@@ -164,7 +168,8 @@ cd apps/streamlit && streamlit run app.py
 cd apps/mobile && npm install && npx expo start
 ```
 
-## 🚀 Démarrage Rapide
+## ⚡ Démarrage Rapide
+<a id="demarrage-rapide"></a>
 
 ### Prérequis
 
@@ -224,7 +229,8 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## 📱 Fonctionnalités
+## 🧩 Fonctionnalités
+<a id="fonctionnalites"></a>
 
 ### Application Mobile
 
@@ -247,7 +253,8 @@ streamlit run app.py
 | **Analyse de risque** | VaR, CVaR, mesures avancées |
 | **Théorie** | Documentation mathématique intégrée |
 
-## 📐 Théorie Mathématique
+## 🧮 Théorie Mathématique
+<a id="theorie-mathematique"></a>
 
 L'application implémente les concepts du **modèle de Markowitz** :
 
@@ -271,6 +278,7 @@ Sous contraintes :
 $$S = \frac{\mu_p - r_f}{\sigma_p}$$
 
 ## 🐳 Commandes Docker
+<a id="commandes-docker"></a>
 
 ```bash
 # Construire les images
@@ -289,7 +297,8 @@ docker-compose down
 docker-compose up -d --build streamlit
 ```
 
-## 👥 Collaboration
+## 🤝 Collaboration
+<a id="collaboration"></a>
 
 ### Pour les Collaborateurs Distants
 
@@ -323,14 +332,16 @@ main                 # Production stable
 └── docs/*           # Documentation
 ```
 
-## 📚 Références
+## 📖 Références
+<a id="references"></a>
 
 - Document de référence : `Efficient_Frontier_Fr/build/prog_finance_fr_v2.pdf`
 - Markowitz, H. (1952). "Portfolio Selection". *Journal of Finance*
 - [Expo Documentation](https://docs.expo.dev/)
 - [Streamlit Documentation](https://docs.streamlit.io/)
 
-## 📄 Licence
+## ⚖️ Licence
+<a id="licence"></a>
 
 Ce projet est développé dans le cadre du cours "Programmation pour la Finance" - UE Info 2025-2026.
 
