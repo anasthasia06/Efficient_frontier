@@ -114,6 +114,43 @@ Vous pouvez démarrer les versions directement depuis VS Code avec les tâches c
 
 Astuce: vous pouvez aussi utiliser le menu Terminal → Run Task… pour retrouver ces commandes.
 
+## 📝 Cheat Sheet Lancement
+
+### Docker global
+```bash
+docker-compose build
+docker-compose up -d
+docker-compose logs -f
+docker-compose down
+```
+
+### Par service
+```bash
+# Desktop (Streamlit)
+docker-compose up -d streamlit
+docker-compose up -d --build streamlit
+
+# Mobile (Expo)
+docker-compose up -d mobile
+docker-compose up -d --build mobile
+```
+
+### VS Code Tasks
+- Docker: Build All
+- Docker: Start All
+- Docker: Stop All
+- Streamlit: Run (local)
+- Mobile: Start Expo (local)
+
+### Local (hors Docker)
+```bash
+# Streamlit
+cd apps/streamlit && streamlit run app.py
+
+# Expo
+cd apps/mobile && npm install && npx expo start
+```
+
 ## 🚀 Démarrage Rapide
 
 ### Prérequis
