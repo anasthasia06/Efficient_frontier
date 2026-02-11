@@ -638,7 +638,7 @@ def main():
         
         st.markdown("""
         Cette application implémente le modèle de Markowitz (1952), fondement de la théorie 
-        moderne du portefeuille. Voici les concepts clés du document de référence :
+        moderne du portefeuille. Voici les concepts clés abordés :
         """)
         
         with st.expander("1-2. Rendement et Risque"):
@@ -687,7 +687,7 @@ def main():
         
         st.markdown("""
         ---
-        **Référence:** Document `prog_finance_fr_v2.pdf` - Programmation pour la Finance
+        **Référence:** Document `prog_finance.pdf` - Programmation pour la Finance
         """)
 
 

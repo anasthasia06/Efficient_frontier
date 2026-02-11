@@ -10,7 +10,7 @@ LABEL version="1.0.0"
 
 # Variables d'environnement
 ENV EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-ENV REACT_NATIVE_PACKAGER_HOSTNAME=0.0.0.0
+ENV REACT_NATIVE_PACKAGER_HOSTNAME=localhost
 ENV CHOKIDAR_USEPOLLING=true
 
 # Installation des dépendances système
@@ -42,10 +42,10 @@ COPY . .
 # 19002: Expo DevTools (web)
 EXPOSE 8081 19000 19001 19002
 
-# Healthcheck
+# Healthcheck: Metro actif (200 ou 404 sont acceptés)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:19000 || exit 1
+    CMD sh -lc 'code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:8081/index.bundle?platform=android&dev=true&minify=false"); [ "$code" = "200" ] || [ "$code" = "404" ]'
 
 # Commande de démarrage
-# Utiliser le mode LAN pour exposer correctement les ports dans le conteneur
-CMD ["npx", "expo", "start", "--lan"]
+# Utiliser le mode localhost pour les émulateurs + adb reverse
+CMD ["npx", "expo", "start", "--localhost", "--port", "8081"]

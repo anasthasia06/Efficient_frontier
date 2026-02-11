@@ -30,3 +30,7 @@ portfolio-optimizer-streamlit   efficient_frontier-streamlit   "streamlit run ap
 
 Pour l'exposition de port : 9002/19000
 docker compose logs -f mobile 
+
+
+adb shell am start -a android.intent.action.VIEW -d 'exp://localhost:19000'
+charlyromytanga.cytech@gmail.com
