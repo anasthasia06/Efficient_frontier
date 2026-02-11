@@ -49,6 +49,57 @@ Efficient_frontier/
 └── README.md
 ```
 
+## 🚀 Lancement des Versions (Docker Compose)
+
+Les deux applications (Desktop Streamlit et Mobile Expo) sont packagées dans des conteneurs Docker et orchestrées via `docker-compose`. Cela permet un lancement homogène, sans installer Node/Expo ou Python localement.
+
+### Prérequis
+- Docker et Docker Compose installés
+- Ports disponibles: `8501` (Streamlit), `19000/19001/19002` et `8081` (Expo/Metro)
+
+### Démarrage global
+```bash
+# Construire toutes les images
+docker-compose build
+
+# Démarrer tous les services en arrière-plan
+docker-compose up -d
+
+# Vérifier les logs (optionnel)
+docker-compose logs -f
+```
+
+### Démarrage par application
+- Streamlit (Desktop):
+```bash
+docker-compose up -d streamlit
+```
+   Accès: http://localhost:8501
+
+- Mobile (Expo):
+```bash
+docker-compose up -d mobile
+```
+   Accès: Expo DevTools http://localhost:19002
+
+### Rebuild ciblé
+```bash
+# Reconstruire et relancer uniquement Streamlit
+docker-compose up -d --build streamlit
+
+# Reconstruire et relancer uniquement Mobile
+docker-compose up -d --build mobile
+```
+
+### Arrêt
+```bash
+docker-compose down
+```
+
+### Notes spécifiques Expo en conteneur
+- Le conteneur expose `19000/19001/19002` et `8081`. Assurez-vous que votre appareil (ou émulateur) est joignable sur le même réseau que votre machine.
+- En cas de difficultés de connexion depuis un appareil physique, privilégiez un émulateur (Android Emulator / iOS Simulator) ou le mode tunnel d’Expo.
+
 ## 🚀 Démarrage Rapide
 
 ### Prérequis
