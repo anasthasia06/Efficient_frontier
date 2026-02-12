@@ -35,6 +35,8 @@ class FrontierPage(Page):
                     max_weight=config.max_weight,
                 )
                 state.frontier = frontier
+                # Mémoriser les actifs utilisés lors du calcul de la frontière
+                state.frontier_assets = list(state.returns_df.columns)
                 st.success("✅ Frontière efficiente calculée!")
 
         if state.frontier is not None:

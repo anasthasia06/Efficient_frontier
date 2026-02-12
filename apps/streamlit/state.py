@@ -14,6 +14,7 @@ class AppState:
     returns_df: Optional[pd.DataFrame] = None
     frontier: Optional[Any] = None
     selected_assets: List[str] = field(default_factory=list)
+    frontier_assets: List[str] = field(default_factory=list)
 
     @classmethod
     def load_from_session(cls) -> "AppState":
@@ -23,6 +24,7 @@ class AppState:
         state.returns_df = st.session_state.get("returns_df")
         state.frontier = st.session_state.get("frontier")
         state.selected_assets = st.session_state.get("selected_assets", [])
+        state.frontier_assets = st.session_state.get("frontier_assets", [])
         return state
 
     def sync_to_session(self) -> None:
@@ -31,6 +33,7 @@ class AppState:
         st.session_state.returns_df = self.returns_df
         st.session_state.frontier = self.frontier
         st.session_state.selected_assets = self.selected_assets
+        st.session_state.frontier_assets = self.frontier_assets
 
 
 @dataclass

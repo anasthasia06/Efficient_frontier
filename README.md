@@ -295,7 +295,44 @@ docker-compose down
 
 # Reconstruire un service spécifique
 docker-compose up -d --build streamlit
+
+# --- Lancement ciblé par service ---
+# Démarrer uniquement l'app Desktop (Streamlit)
+docker-compose up -d streamlit
+
+# Démarrer uniquement l'app Mobile (Expo)
+docker-compose up -d mobile
+
+# Reconstruire uniquement Mobile et démarrer
+docker-compose up -d --build mobile
+
+# Consulter les logs d'un service précis
+docker-compose logs -f streamlit
+docker-compose logs -f mobile
+
+# (Compose v2) Vous pouvez aussi utiliser:
+# docker compose up -d streamlit
+# docker compose up -d mobile
 ```
+
+### Lancement local (hors Docker)
+
+```bash
+# Desktop Web (Streamlit) – version classique
+cd apps/streamlit && poetry run streamlit run app.py --server.port 8501
+
+# Desktop Web (Streamlit) – version OOP
+cd apps/streamlit && poetry run streamlit run app_oop.py --server.port 8501
+
+# Mobile (Expo) – en local
+cd apps/mobile && npm install && npx expo start
+```
+
+Astuce:
+- En cas d'erreur `exit code 1` avec `docker-compose up`, inspectez les logs:
+   - `docker-compose logs --no-log-prefix --tail=200 streamlit`
+   - `docker-compose logs --no-log-prefix --tail=200 mobile`
+- Vérifiez que les ports requis sont libres: 8501 (Streamlit), 19000/19001/19002 et 8081 (Expo/Metro).
 
 ## 🤝 Collaboration
 <a id="collaboration"></a>

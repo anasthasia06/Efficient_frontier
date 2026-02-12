@@ -22,7 +22,12 @@ class OptimalPortfoliosPage(Page):
             return
 
         frontier = state.frontier
-        assets = state.selected_assets
+        # Utiliser les actifs mémorisés lors du calcul de la frontière pour garantir la cohérence
+        assets = state.frontier_assets if state.frontier_assets else (list(state.returns_df.columns) if state.returns_df is not None else [])
+        # Sécurité: aligner la longueur des noms avec les poids
+        n_weights = len(frontier.min_variance_portfolio.weights)
+        if len(assets) != n_weights:
+            assets = [f"Actif {i+1}" for i in range(n_weights)]
 
         col1, col2 = st.columns(2)
         with col1:
