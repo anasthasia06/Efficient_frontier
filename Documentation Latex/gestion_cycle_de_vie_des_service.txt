@@ -34,3 +34,29 @@ docker compose logs -f mobile
 
 adb shell am start -a android.intent.action.VIEW -d 'exp://localhost:19000'
 charlyromytanga.cytech@gmail.com
+
+
+
+ss -tulpn | grep -E '19000|19001|19002|8081' || netstat -tulpn | grep -E '19000|19001|19002|8081'
+docker compose ps
+
+docker attach portfolio-optimizer-mobile
+
+
+10.182.98.179
+
+
+docker compose up -d --build mobile
+docker compose logs -f mobile
+
+
+
+# Par service
+docker compose stop mobile
+docker compose up -d mobile
+docker compose logs -f mobile
+
+# Par nom auto
+docker stop efficient_frontier-mobile-1
+docker logs -f efficient_frontier-streamlit-1
+docker exec -it efficient_frontier-mobile-1 sh

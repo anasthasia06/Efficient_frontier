@@ -113,7 +113,19 @@ docker-compose down
 
 ### Notes spécifiques Expo en conteneur
 - Le conteneur expose `19000/19001/19002` et `8081`. Assurez-vous que votre appareil (ou émulateur) est joignable sur le même réseau que votre machine.
-- En cas de difficultés de connexion depuis un appareil physique, privilégiez un émulateur (Android Emulator / iOS Simulator) ou le mode tunnel d’Expo.
+- Mode LAN recommandé: définissez votre IP locale dans `.env` pour que Expo annonce la bonne adresse.
+  1. Récupérer l’IP locale: `hostname -I | awk '{print $1}'`
+  2. Éditer `.env` à la racine et renseigner:
+     ```
+     EXPO_HOST_IP=192.168.x.y
+     ```
+  3. Relancer le service mobile:
+     ```bash
+     docker compose up -d --build mobile
+     docker compose logs -f mobile
+     ```
+  - Ouvrir DevTools: http://localhost:19002, choisir "LAN" et scanner le QR avec Expo Go.
+- Alternatif: utilisez le mode Tunnel si le LAN est compliqué: `docker compose run --rm --service-ports mobile npx expo start --tunnel`
 
 ## 🧑‍💻 Lancement via VS Code (Tâches)
 <a id="lancement-via-vs-code-taches"></a>

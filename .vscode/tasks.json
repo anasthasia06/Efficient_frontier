@@ -1,0 +1,42 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Docker: Mobile Stop",
+			"type": "shell",
+			"command": "docker compose stop mobile",
+			"group": "build"
+		},
+		{
+			"label": "Docker: Mobile Start",
+			"type": "shell",
+			"command": "docker compose up -d mobile",
+			"group": "build"
+		},
+		{
+			"label": "Docker: Mobile Logs",
+			"type": "shell",
+			"command": "docker compose logs -f mobile",
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Docker: Streamlit Stop",
+			"type": "shell",
+			"command": "docker compose stop streamlit",
+			"group": "build"
+		},
+		{
+			"label": "Docker: Streamlit Start",
+			"type": "shell",
+			"command": "docker compose up -d streamlit",
+			"group": "build"
+		},
+		{
+			"label": "Docker: Streamlit Logs",
+			"type": "shell",
+			"command": "docker compose logs -f streamlit",
+			"group": "build"
+		}
+	]
+}
