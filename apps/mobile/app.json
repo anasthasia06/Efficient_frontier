@@ -9,7 +9,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#1a1a2e"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.finance.portfoliooptimizer"
@@ -21,10 +23,14 @@
       "bundler": "metro"
     },
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "portfolio-optimizer"
+        "projectId": "a3aa4761-f396-430f-8af3-4dc1c13604f1"
       }
     },
-    "plugins": ["expo-router"]
+    "plugins": [
+      "expo-router"
+    ],
+    "owner": "charlyromytanga"
   }
 }

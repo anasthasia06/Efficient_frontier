@@ -52,10 +52,16 @@ services:
       - ./apps/mobile:/app:cached
       # Volume dédié pour node_modules afin de conserver les dépendances dans le conteneur
       - mobile_node_modules:/app/node_modules
+      # Cache npm persistant vers /data pour éviter ENOSPC
+      - /data/npm-cache:/root/.npm
     environment:
+      - EXPO_TOKEN=${EXPO_TOKEN}
       - EXPO_DEVTOOLS_LISTEN_ADDRESS=127.0.0.1
       - REACT_NATIVE_PACKAGER_HOSTNAME=127.0.0.1
       - CHOKIDAR_USEPOLLING=true
+      - NPM_CONFIG_CACHE=/root/.npm
+    env_file:
+      - ./.env
     # Démarrage: installe les dépendances si absentes, aligne les versions SDK Expo, purge le cache Metro, puis lance Expo en localhost (USB/ADB friendly)
     command: >-
       sh -lc "if [ ! -d node_modules ] || [ -z \"$$(ls -A node_modules 2>/dev/null)\" ]; then npm ci || npm install; fi; npx expo install && rm -rf node_modules/.cache && npx expo start --localhost"
@@ -66,6 +72,34 @@ services:
     labels:
       - "app.name=portfolio-optimizer-mobile"
       - "app.description=Application mobile React Native Expo"
+
+  # ============================================
+  # Builder Android SDK (Gradle) pour APK local
+  # ============================================
+  mobile-build:
+    image: reactnativecommunity/react-native-android:latest
+    working_dir: /app
+    volumes:
+      - ./apps/mobile:/app:cached
+      # Caches et SDK lourds persistés sur /data
+      - /data/android-sdk:/opt/android
+      - /data/android-gradle-cache:/root/.gradle
+      - /data/npm-cache:/root/.npm
+      # Sortie de build (APK) hors racine FS
+      - /data/android-build-output:/app/android/app/build
+    environment:
+      - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+      - ANDROID_HOME=/opt/android
+      - ANDROID_SDK_ROOT=/opt/android
+      - GRADLE_USER_HOME=/root/.gradle
+      - NODE_ENV=production
+      - CI=1
+    command: bash -lc "npm install && npx expo install react-native-worklets || true && npx expo prebuild --platform android"
+    networks:
+      - portfolio-network
+    labels:
+      - "app.name=portfolio-optimizer-mobile-build"
+      - "app.description=Service build Android SDK pour APK local"
 
   # ============================================
   # API Backend (optionnel - pour partage de données)
