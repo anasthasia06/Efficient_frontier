@@ -44,7 +44,7 @@ class PortfolioOptimizerApp:
 
     def render_sidebar(self) -> None:
         with st.sidebar:
-            st.header("⚙️ Données & Paramètres (OOP)")
+            st.header("⚙️ Données & Paramètres")
 
             # Sélecteur de thème
             self.config.theme = st.radio("Thème", ["Sombre", "Clair"], index=0)
@@ -76,7 +76,7 @@ class PortfolioOptimizerApp:
                 with col2:
                     end_date = st.date_input("Fin", datetime.now())
 
-                if st.button("📥 Charger les données (OOP)", type="primary"):
+                if st.button("📥 Charger les données", type="primary"):
                     start_dt = datetime.combine(start_date, datetime.min.time())
                     end_dt = datetime.combine(end_date, datetime.min.time())
                     prices = self.market_service.load_market_data(tickers, start_dt, end_dt)
@@ -89,7 +89,7 @@ class PortfolioOptimizerApp:
                 st.subheader("Configuration synthétique")
                 n_assets = st.slider("Nombre d'actifs", 3, 10, 5)
                 n_periods = st.slider("Périodes", 100, 1000, 252)
-                if st.button("🎲 Générer données (OOP)", type="primary"):
+                if st.button("🎲 Générer données", type="primary"):
                     df = self.synthetic_service.generate(n_assets, n_periods, seed=42)
                     self.state.returns_df = df
                     self.state.selected_assets = list(df.columns)
@@ -119,7 +119,7 @@ class PortfolioOptimizerApp:
 
     def run(self) -> None:
         # Mode pleine largeur pour éviter le centrage par défaut
-        st.set_page_config(layout="wide", page_title="Portfolio Optimizer (OOP)", page_icon="🧮")
+        st.set_page_config(layout="wide", page_title="Portfolio Optimizer", page_icon="🧮")
 
         # Charger le CSS global
         self._inject_css()
@@ -138,7 +138,7 @@ class PortfolioOptimizerApp:
             st.markdown("<style>.stApp{background-color:#ffffff}</style>", unsafe_allow_html=True)
 
         # En-têtes et contenu
-        st.markdown('<p class="main-header">🧮💻 Portfolio Optimizer (OOP)</p>', unsafe_allow_html=True)
+        st.markdown('<p class="main-header">🧮💻 Portfolio Optimizer</p>', unsafe_allow_html=True)
         st.markdown('<p class="sub-header">Optimisation de Portefeuille - Théorie Moderne de Markowitz</p>', unsafe_allow_html=True)
         self.render_tabs()
 

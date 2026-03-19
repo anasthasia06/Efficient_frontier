@@ -75,6 +75,7 @@ services:
       - ./infra/monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       - prometheus
+      - promtail
       - loki
     networks:
       - portfolio-network
@@ -85,7 +86,7 @@ services:
     group_add:
       - "${MONITORING_GID:-46}"
     ports:
-      - "127.0.0.1:9090:9090"
+      - "127.0.0.1:9091:9090"
     volumes:
       - ./infra/monitoring/prometheus:/etc/prometheus
       - prometheus_data:/prometheus

@@ -89,8 +89,8 @@ docker compose up -d grafana prometheus loki promtail cadvisor
 
 ### Accéder à Grafana
 
-- Grafana (administration locale) : `http://localhost:3000`
-- Prometheus (administration locale) : `http://localhost:9090`
+- Grafana (administration locale) : `http://localhost:3010` (ou la valeur de `GRAFANA_HOST_PORT`)
+- Prometheus (administration locale) : `http://localhost:9091`
 
 ### Consulter les logs et les métriques
 
@@ -109,15 +109,15 @@ Si Grafana affiche `Failed to load dashboard` ou `Failed to load home dashboard`
 
 ```bash
 docker compose ps
-curl -s -o /dev/null -w 'grafana:%{http_code}\n' http://localhost:3000/api/health
-curl -s -o /dev/null -w 'prometheus:%{http_code}\n' http://localhost:9090/-/healthy
+curl -s -o /dev/null -w 'grafana:%{http_code}\n' http://localhost:${GRAFANA_HOST_PORT:-3010}/api/health
+curl -s -o /dev/null -w 'prometheus:%{http_code}\n' http://localhost:9091/-/healthy
 curl -s -o /dev/null -w 'loki:%{http_code}\n' http://localhost:3100/ready
 ```
 
 2. Ouvrir directement le dashboard provisionné :
 
 ```text
-http://localhost:3000/d/monitoring-overview/monitoring-overview
+http://localhost:3010/d/monitoring-overview/monitoring-overview
 ```
 
 3. Si nécessaire, redémarrer uniquement la stack monitoring :
