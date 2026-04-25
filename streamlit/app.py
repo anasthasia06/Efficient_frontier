@@ -52,45 +52,14 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Style CSS personnalisé
-st.markdown("""
-<style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #e94560;
-        text-align: center;
-        margin-bottom: 0.5rem;
-    }
-    .sub-header {
-        font-size: 1rem;
-        color: #8892b0;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    .metric-card {
-        background-color: #1a1a2e;
-        padding: 1.5rem;
-        border-radius: 10px;
-        border-left: 4px solid #e94560;
-    }
-    .formula {
-        font-family: monospace;
-        background-color: #0f0f23;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        color: #64ffda;
-    }
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 2px;
-    }
-    .stTabs [data-baseweb="tab"] {
-        background-color: #1a1a2e;
-        border-radius: 4px 4px 0 0;
-        color: #ccd6f6;
-    }
-</style>
-""", unsafe_allow_html=True)
+
+# Style CSS personnalisé (thème clair par défaut)
+try:
+    with open("assets/styles-light.css", "r", encoding="utf-8") as f:
+        css = f.read()
+    st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
+except Exception:
+    st.markdown("<style>.main-header{font-size:2rem;font-weight:700;text-align:center}</style>", unsafe_allow_html=True)
 
 
 def init_session_state():
