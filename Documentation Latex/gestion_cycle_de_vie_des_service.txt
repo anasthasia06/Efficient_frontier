@@ -1,0 +1,62 @@
+Les conteneurs: 
+
+✔ streamlit                                Built                                                                              0.0s 
+ ✔ Network portfolio-optimizer-network      Created                                                                            0.2s 
+ ✔ Container portfolio-optimizer-mobile     Started                                                                           17.4s 
+ ✔ Container portfolio-optimizer-streamlit  Started                                                                           17.1s 
+
+ Les accès aux services: 
+Streamlit: ouvrez http://localhost:8501
+Expo DevTools: ouvrez http://localhost:19002
+Expo Dev Server: http://localhost:19000 (Metro bundler) et http://localhost:8081 (bundler)
+Fichier Streamlit: voir apps/streamlit/app.py si vous souhaitez modifier l’interface.
+
+Vérification des services:
+docker compose ps
+docker compose logs -f streamlit
+docker compose logs -f mobile
+
+Gestion des services:
+Redémarrer: docker compose up -d
+Arrêter: docker compose down
+Rebuild ciblé: docker compose build streamlit ou docker compose build mobile
+
+
+Pour le service mobile:
+ ✔ Container portfolio-optimizer-mobile  Started                                                                               1.7s 
+NAME                            IMAGE                          COMMAND                  SERVICE     CREATED          STATUS                                     PORTS
+portfolio-optimizer-mobile      efficient_frontier-mobile      "docker-entrypoint.s…"   mobile      2 seconds ago    Up Less than a second (health: starting)   0.0.0.0:8081->8081/tcp, [::]:8081->8081/tcp, 0.0.0.0:19000-19002->19000-19002/tcp, [::]:19000-19002->19000-19002/tcp
+portfolio-optimizer-streamlit   efficient_frontier-streamlit   "streamlit run app.p…"   streamlit   11 minutes ago   Up 11 minutes (healthy)                    0.0.0.0:8501->8501/tcp, [::]:8501->8501/tcp
+
+Pour l'exposition de port : 9002/19000
+docker compose logs -f mobile 
+
+
+adb shell am start -a android.intent.action.VIEW -d 'exp://localhost:19000'
+charlyromytanga.cytech@gmail.com
+
+
+
+ss -tulpn | grep -E '19000|19001|19002|8081' || netstat -tulpn | grep -E '19000|19001|19002|8081'
+docker compose ps
+
+docker attach portfolio-optimizer-mobile
+
+
+10.182.98.179
+
+
+docker compose up -d --build mobile
+docker compose logs -f mobile
+
+
+
+# Par service
+docker compose stop mobile
+docker compose up -d mobile
+docker compose logs -f mobile
+
+# Par nom auto
+docker stop efficient_frontier-mobile-1
+docker logs -f efficient_frontier-streamlit-1
+docker exec -it efficient_frontier-mobile-1 sh

@@ -1,0 +1,63 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "type": "stat",
+      "title": "CPU cores (host)",
+      "datasource": {"type": "prometheus", "uid": "prometheus_ds"},
+      "targets": [{"expr": "machine_cpu_cores", "refId": "A"}],
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0}
+    },
+    {
+      "type": "stat",
+      "title": "Host memory (bytes)",
+      "datasource": {"type": "prometheus", "uid": "prometheus_ds"},
+      "targets": [{"expr": "machine_memory_bytes", "refId": "A"}],
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0}
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU usage by container",
+      "datasource": {"type": "prometheus", "uid": "prometheus_ds"},
+      "targets": [
+        {"expr": "sum(rate(container_cpu_usage_seconds_total{name=~'.+'}[5m])) by (name)", "legendFormat": "{{name}}", "refId": "A"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4}
+    },
+    {
+      "type": "timeseries",
+      "title": "Memory usage by container",
+      "datasource": {"type": "prometheus", "uid": "prometheus_ds"},
+      "targets": [
+        {"expr": "sum(container_memory_usage_bytes{name=~'.+'}) by (name)", "legendFormat": "{{name}}", "refId": "A"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4}
+    },
+    {
+      "type": "logs",
+      "title": "Application logs (Streamlit + Nginx)",
+      "datasource": {"type": "loki", "uid": "loki_ds"},
+      "targets": [
+        {"expr": "{job=~\"streamlit|nginx|docker-all\"}", "refId": "A"}
+      ],
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 12}
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["monitoring", "docker", "logs"],
+  "templating": {"list": []},
+  "time": {"from": "now-15m", "to": "now"},
+  "timepicker": {},
+  "timezone": "",
+  "title": "Monitoring Overview",
+  "uid": "monitoring-overview",
+  "version": 1,
+  "weekStart": ""
+}

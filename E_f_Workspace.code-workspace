@@ -1,0 +1,99 @@
+{
+	"folders": [
+		{
+			"name": "📁 Projet Principal",
+			"path": "."
+		},
+		{
+			"name": "📱 Mobile (Expo)",
+			"path": "apps/mobile"
+		},
+		{
+			"name": "💻 Desktop (Streamlit)",
+			"path": "apps/streamlit"
+		},
+		{
+			"name": "📚 Documentation LaTeX",
+			"path": "Efficient_Frontier_Fr"
+		}
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+		"editor.tabSize": 2,
+		"files.associations": {
+			"*.tsx": "typescriptreact",
+			"*.ts": "typescript"
+		},
+		"python.defaultInterpreterPath": "${workspaceFolder}/apps/streamlit/venv/bin/python",
+		"python.analysis.typeCheckingMode": "basic",
+		"[python]": {
+			"editor.tabSize": 4
+		},
+		"[typescript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		},
+		"[typescriptreact]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+			"ms-python.vscode-pylance",
+			"dbaeumer.vscode-eslint",
+			"esbenp.prettier-vscode",
+			"ms-azuretools.vscode-docker",
+			"james-yu.latex-workshop",
+			"msjsdiag.vscode-react-native"
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Streamlit",
+				"type": "python",
+				"request": "launch",
+				"module": "streamlit",
+				"args": ["run", "apps/streamlit/app.py"],
+				"console": "integratedTerminal",
+				"cwd": "${workspaceFolder}"
+			}
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Docker: Build All",
+				"type": "shell",
+				"command": "docker-compose build",
+				"group": "build"
+			},
+			{
+				"label": "Docker: Start All",
+				"type": "shell",
+				"command": "docker-compose up -d",
+				"group": "build"
+			},
+			{
+				"label": "Docker: Stop All",
+				"type": "shell",
+				"command": "docker-compose down",
+				"group": "build"
+			},
+			{
+				"label": "Mobile: Start Expo",
+				"type": "shell",
+				"command": "cd apps/mobile && npx expo start",
+				"group": "build"
+			},
+			{
+				"label": "Streamlit: Run",
+				"type": "shell",
+				"command": "cd apps/streamlit && streamlit run app.py",
+				"group": "build"
+			}
+		]
+	}
+}

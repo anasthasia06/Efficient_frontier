@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Portfolio Optimizer",
+    "slug": "portfolio-optimizer",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#1a1a2e"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.finance.portfoliooptimizer"
+    },
+    "android": {
+      "package": "com.finance.portfoliooptimizer"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a3aa4761-f396-430f-8af3-4dc1c13604f1"
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "owner": "charlyromytanga"
+  }
+}

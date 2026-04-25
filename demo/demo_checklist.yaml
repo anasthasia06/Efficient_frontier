@@ -1,0 +1,49 @@
+demo_context:
+  objectif: "Démonstration 100% web depuis smartphone via QR code"
+  reseau:
+    box_personnelle_autorisee: true
+    condition_essentielle: "PC hôte et smartphones connectés au même Wi-Fi"
+    isolation_clients:
+      doit_etre_desactivee: true
+      description: "Si l'isolation AP/client est active, les téléphones ne verront pas le PC"
+
+services_et_urls:
+  landing_page:
+    service: "landing (Nginx)"
+    acces_local_machine: "http://localhost:8080"
+    acces_smartphone: "http://<IP_PC>:8080"
+  streamlit:
+    service: "streamlit"
+    acces_local_machine: "http://localhost:8501/app/"
+    acces_smartphone: "http://<IP_PC>:8501/app/"
+
+points_importants:
+  - "Le QR code doit pointer vers http://<IP_PC>:8080 et jamais vers localhost"
+  - "Le bouton de la landing page doit rediriger vers /app/"
+  - "Ouvrir les ports 8080 (landing) et 8501 (Streamlit) dans le firewall du PC"
+  - "Pour HTTPS en démo sans domaine, utiliser un tunnel (Cloudflare/ngrok) vers le port 8080"
+  - "Si Internet est instable, privilégier le mode données synthétiques pour éviter les échecs Yahoo Finance"
+
+checklist_jour_j:
+  avant_arrivee_public:
+    - "Démarrer les conteneurs Docker et vérifier qu'ils sont en état healthy"
+    - "Vérifier depuis le PC: http://localhost:8080 et http://localhost:8501"
+    - "Identifier l'IP locale du PC sur le Wi-Fi de la box (ex: 192.168.x.y)"
+    - "Tester depuis un smartphone: http://<IP_PC>:8080 puis clic vers Streamlit"
+    - "Générer/mettre à jour le QR code vers http://<IP_PC>:8080"
+    - "Confirmer l'absence d'isolation client sur la box"
+    - "Vérifier que le firewall autorise 8080 et 8501"
+
+  juste_avant_demo:
+    - "Faire un test complet du parcours: QR -> landing -> bouton -> Streamlit"
+    - "Préparer un smartphone de secours déjà connecté au Wi-Fi"
+    - "Préparer un plan B: mode synthétique activable rapidement"
+
+  pendant_demo:
+    - "Surveiller les logs des services landing et streamlit"
+    - "En cas d'échec d'accès, revalider IP du PC, Wi-Fi, firewall et URL QR"
+
+plan_b_rapide:
+  - "Si un téléphone ne charge pas la page: ouvrir directement http://<IP_PC>:8080 dans le navigateur"
+  - "Si Streamlit est lent: éviter les téléchargements de données marché en direct"
+  - "Si HTTPS est exigé à la dernière minute: basculer vers un tunnel sécurisé temporaire"
