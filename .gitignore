@@ -1,0 +1,74 @@
+# env
+.env
+.venv
+venv/
+# pycharm
+.idea/
+# vscode
+.vscode/
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+# distribution
+build/
+dist/
+*.egg-info/
+# pytest
+.pytest_cache/
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+# pyre
+.pyre/
+# pytype
+.pytype/
+# coverage
+.coverage
+.coverage.*
+htmlcov/
+# logs*.log
+# virtualenv
+env/
+# celery beat schedule file
+celerybeat-schedule
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+# Flask stuff:
+instance/
+.webassets-cache
+# Scrapy stuff:
+.scrapy
+# Sphinx documentation
+docs/_build/
+# PyBuilder
+target/
+# Jupyter Notebook
+.ipynb_checkpoints
+# IPython
+profile_default/
+ipython_config.py
+# pyenv
+.python-version
+# pipenv
+Pipfile.lock
+# pytest
+.cache
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+# pyre
+.pyre/
+# pytype
+.pytype/
+# Cython debug symbols
+cython_debug/   
+
+uv.lock
+.github/
