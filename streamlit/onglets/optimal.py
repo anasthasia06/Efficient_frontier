@@ -3,10 +3,10 @@ from __future__ import annotations
 import streamlit as st
 import pandas as pd
 
-from onglets.base import Page
-from state import AppState, OptimizationConfig
-from services import OptimizationService
-from plots import PlotService
+from streamlit.onglets.base import Page
+from streamlit.state import AppState, OptimizationConfig
+from streamlit.services import OptimizationService
+from streamlit.plots import PlotService
 
 
 class OptimalPortfoliosPage(Page):

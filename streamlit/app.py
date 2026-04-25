@@ -29,7 +29,7 @@ import yfinance as yf
 from datetime import datetime, timedelta
 
 # Import du module d'optimisation
-from core.optimization import (
+from streamlit.core.optimization import (
     calculate_returns,
     calculate_expected_returns,
     calculate_covariance_matrix,
