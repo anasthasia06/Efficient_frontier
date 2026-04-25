@@ -1,0 +1,159 @@
+# Portfolio Optimizer - Docker Compose
+# Orchestration des conteneurs pour la landing page et l'application Streamlit
+
+ 
+
+services:
+
+
+  # ============================================
+  # Application Streamlit (racine)
+  # ============================================
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./streamlit:/app/streamlit:cached
+      - /app/__pycache__
+    environment:
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - portfolio-network
+    labels:
+      - "app.name=portfolio-optimizer-streamlit"
+      - "app.description=Application Streamlit pour optimisation de portefeuille"
+
+  # ============================================
+  # Monitoring stack
+  # ============================================
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    group_add:
+      - "${MONITORING_GID:-46}"
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/overview.json
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infra/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+      - promtail
+      - loki
+    networks:
+      - portfolio-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    group_add:
+      - "${MONITORING_GID:-46}"
+    ports:
+      - "127.0.0.1:9091:9090"
+    volumes:
+      - ./infra/monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    networks:
+      - portfolio-network
+
+  loki:
+    image: grafana/loki:latest
+    restart: unless-stopped
+    group_add:
+      - "${MONITORING_GID:-46}"
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./infra/monitoring/loki:/etc/loki
+      - loki_data:/loki
+    command:
+      - "-config.file=/etc/loki/loki-config.yml"
+    networks:
+      - portfolio-network
+
+  promtail:
+    image: grafana/promtail:latest
+    restart: unless-stopped
+    group_add:
+      - "${MONITORING_GID:-46}"
+    volumes:
+      - ./infra/monitoring/promtail:/etc/promtail
+      - /var/log:/var/log:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - "-config.file=/etc/promtail/promtail-config.yml"
+    depends_on:
+      - loki
+    networks:
+      - portfolio-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    restart: unless-stopped
+    ports:
+      - "8088:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    networks:
+      - portfolio-network
+
+  # ============================================
+  # API Backend (optionnel - pour partage de données)
+  # ============================================
+  # api:
+  #   build:
+  #     context: ./apps/api
+  #     dockerfile: Dockerfile
+  #   container_name: portfolio-optimizer-api
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ./apps/api:/app:cached
+  #   environment:
+  #     - DATABASE_URL=sqlite:///./portfolio.db
+  #   networks:
+  #     - portfolio-network
+
+# ============================================
+# Réseau
+# ============================================
+networks:
+  portfolio-network:
+    driver: bridge
+    name: portfolio-optimizer-network
+
+# ============================================
+# Volumes persistants
+# ============================================
+volumes:
+  grafana_data:
+  prometheus_data:
+  loki_data:

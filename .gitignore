@@ -1,0 +1,51 @@
+
+# Ignorer les fichiers et dossiers réellement présents dans ce repo
+
+# Environnement virtuel local
+.venv/
+.env
+
+# VSCode
+.vscode/
+
+# Caches Python
+__pycache__/
+streamlit/__pycache__/
+streamlit/core/__pycache__/
+streamlit/onglets/__pycache__/
+apps/streamlit/__pycache__/
+src/streamlit/__pycache__/
+
+# Streamlit config
+streamlit/.streamlit/
+
+# Egg-info (si build)
+*.egg-info/
+
+# Dossiers ou fichiers générés par l'utilisateur
+docs/_build/
+# IPython
+profile_default/
+ipython_config.py
+# pyenv
+.python-version
+# pipenv
+Pipfile.lock
+# pytest
+.cache
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+# pyre
+.pyre/
+# pytype
+.pytype/
+# Cython debug symbols
+cython_debug/   
+
+uv.lock
+.github/
+
+src/
+apps/

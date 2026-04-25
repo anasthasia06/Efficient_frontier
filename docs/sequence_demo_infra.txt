@@ -1,0 +1,132 @@
+SEQUENCE REUTILISABLE - DEMO WEB + INFRA MONITORING
+
+1) PREPARER L'ARBORESCENCE
+
+<nouveau-projet>/
+|- docker-compose.yml
+|- .env
+|- demo/
+|  |- Dockerfile
+|  |- index.html
+|  |- nginx/
+|  |  |- landing.conf
+|  |- update_qr_from_ngrok.sh
+|- infra/
+|  |- monitoring/
+|  |  |- grafana/
+|  |  |  |- dashboards/
+|  |  |  |  |- overview.json
+|  |  |  |- provisioning/
+|  |  |  |  |- dashboards/
+|  |  |  |  |  |- dashboards.yml
+|  |  |  |  |- datasources/
+|  |  |  |  |  |- datasources.yml
+|  |  |- prometheus/
+|  |  |  |- prometheus.yml
+|  |  |- loki/
+|  |  |  |- loki-config.yml
+|  |  |- promtail/
+|  |  |  |- promtail-config.yml
+
+2) COPIER LES FICHIERS CLES
+
+Depuis ce projet, copier tels quels:
+- demo/index.html
+- demo/nginx/landing.conf
+- demo/update_qr_from_ngrok.sh
+- infra/monitoring/prometheus/prometheus.yml
+- infra/monitoring/loki/loki-config.yml
+- infra/monitoring/promtail/promtail-config.yml
+- infra/monitoring/grafana/provisioning/datasources/datasources.yml
+- infra/monitoring/grafana/provisioning/dashboards/dashboards.yml
+- infra/monitoring/grafana/dashboards/overview.json
+
+3) ADAPTER LE SERVICE APPLICATIF
+
+Dans docker-compose.yml:
+- garder le service landing
+- remplacer streamlit par votre service applicatif (ex: webapp)
+
+Dans demo/nginx/landing.conf:
+- adapter le proxy_pass:
+  actuel: proxy_pass http://streamlit:8501;
+  exemple: proxy_pass http://webapp:3000;
+
+4) DEFINIR LES VARIABLES D'ENV
+
+Fichier .env:
+
+COMPOSE_PROJECT_NAME=mon_projet_demo
+GRAFANA_ADMIN_USER=admin
+GRAFANA_ADMIN_PASSWORD=admin
+MONITORING_GID=46
+
+5) DEFINIR LES SERVICES DANS DOCKER COMPOSE
+
+Services attendus:
+- landing (port 8080)
+- votre app
+- grafana (127.0.0.1:3000)
+- prometheus (127.0.0.1:9090)
+- loki (3100)
+- promtail
+- cadvisor (8088)
+
+Volumes persistants:
+- grafana_data
+- prometheus_data
+- loki_data
+
+Si vos fichiers monitoring sont en root:plugdev avec mode 770:
+- ajouter group_add: "${MONITORING_GID:-46}" sur:
+  grafana, prometheus, loki, promtail
+
+6) DEMARRER LA STACK
+
+Depuis la racine du nouveau projet:
+
+docker compose up -d --build
+
+7) VERIFIER L'ETAT
+
+docker compose ps
+curl -s -o /dev/null -w 'landing:%{http_code}\n' http://localhost:8080
+curl -s -o /dev/null -w 'grafana:%{http_code}\n' http://localhost:3000/api/health
+curl -s -o /dev/null -w 'prometheus:%{http_code}\n' http://localhost:9090/-/healthy
+curl -s -o /dev/null -w 'loki:%{http_code}\n' http://localhost:3100/ready
+
+8) VERIFIER GRAFANA
+
+- URL: http://localhost:3000
+- Login: GRAFANA_ADMIN_USER / GRAFANA_ADMIN_PASSWORD
+- Dashboard attendu: Monitoring Overview
+- URL directe: http://localhost:3000/d/monitoring-overview/monitoring-overview
+
+9) EXPOSITION SMARTPHONE (QR + HTTPS TUNNEL)
+
+Terminal 1:
+ngrok http 8080
+
+Terminal 2:
+bash demo/update_qr_from_ngrok.sh
+
+Note:
+- commande correcte: ngrok http 8080
+- erreur courante a eviter: ngrock htt 8080
+
+10) DEPANNAGE RAPIDE
+
+A) Failed to load dashboard/home dashboard
+- docker compose up -d grafana prometheus loki promtail cadvisor
+- hard refresh navigateur (Ctrl+F5)
+- ouvrir l'URL directe du dashboard
+
+B) permission denied sur configs monitoring
+- verifier proprietaire/mode des dossiers/fichiers
+- utiliser ACL (setfacl) ou group_add + MONITORING_GID
+
+C) permission denied sur volumes data
+- corriger ownership des volumes (UID services)
+- relancer la stack monitoring
+
+FIN
