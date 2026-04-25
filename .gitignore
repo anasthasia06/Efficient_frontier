@@ -72,3 +72,5 @@ cython_debug/
 
 uv.lock
 .github/
+
+src/
