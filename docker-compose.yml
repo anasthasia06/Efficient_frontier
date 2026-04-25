@@ -1,50 +1,28 @@
 # Portfolio Optimizer - Docker Compose
-# Orchestration des conteneurs pour la landing page et l'application Streamlit
-
- 
+# Usage local : streamlit + stack monitoring complète
 
 services:
-  # ============================================
-  # Landing page + proxy /app (Nginx)
-  # ============================================
-  landing:
-    build:
-      context: ./demo
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    depends_on:
-      - streamlit
-    ports:
-      - "8080:80"
-    networks:
-      - portfolio-network
-    labels:
-      - "app.name=portfolio-optimizer-landing"
-      - "app.description=Landing page et passerelle locale vers Streamlit"
 
   # ============================================
-  # Application Streamlit (Desktop)
+  # Application Streamlit
   # ============================================
   streamlit:
     build:
-      context: ./apps/streamlit
+      context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - "8501:8501"
+      - "${STREAMLIT_SERVER_PORT:-8501}:8501"
     volumes:
-      # Montage du code source pour le développement
-      - ./apps/streamlit:/app:cached
-      # Exclusion du cache Python
+      - ./src/streamlit:/app:cached
       - /app/__pycache__
     environment:
       - STREAMLIT_SERVER_PORT=8501
       - STREAMLIT_SERVER_ADDRESS=0.0.0.0
-      - STREAMLIT_SERVER_BASE_URL_PATH=/app
       - STREAMLIT_SERVER_HEADLESS=true
       - STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8501/app/_stcore/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -52,11 +30,10 @@ services:
     networks:
       - portfolio-network
     labels:
-      - "app.name=portfolio-optimizer-streamlit"
-      - "app.description=Application desktop Streamlit pour optimisation de portefeuille"
+      - "app.name=portfolio-optimizer"
 
   # ============================================
-  # Monitoring stack
+  # Monitoring stack (local uniquement)
   # ============================================
   grafana:
     image: grafana/grafana:latest
@@ -64,15 +41,15 @@ services:
     group_add:
       - "${MONITORING_GID:-46}"
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:${GRAFANA_HOST_PORT:-3010}:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/overview.json
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./infra/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./infra/monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./src/infra/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./src/infra/monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       - prometheus
       - promtail
@@ -88,7 +65,7 @@ services:
     ports:
       - "127.0.0.1:9091:9090"
     volumes:
-      - ./infra/monitoring/prometheus:/etc/prometheus
+      - ./src/infra/monitoring/prometheus:/etc/prometheus
       - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
@@ -103,7 +80,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - ./infra/monitoring/loki:/etc/loki
+      - ./src/infra/monitoring/loki:/etc/loki
       - loki_data:/loki
     command:
       - "-config.file=/etc/loki/loki-config.yml"
@@ -116,7 +93,7 @@ services:
     group_add:
       - "${MONITORING_GID:-46}"
     volumes:
-      - ./infra/monitoring/promtail:/etc/promtail
+      - ./src/infra/monitoring/promtail:/etc/promtail
       - /var/log:/var/log:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -143,35 +120,11 @@ services:
     networks:
       - portfolio-network
 
-  # ============================================
-  # API Backend (optionnel - pour partage de données)
-  # ============================================
-  # api:
-  #   build:
-  #     context: ./apps/api
-  #     dockerfile: Dockerfile
-  #   container_name: portfolio-optimizer-api
-  #   restart: unless-stopped
-  #   ports:
-  #     - "8000:8000"
-  #   volumes:
-  #     - ./apps/api:/app:cached
-  #   environment:
-  #     - DATABASE_URL=sqlite:///./portfolio.db
-  #   networks:
-  #     - portfolio-network
-
-# ============================================
-# Réseau
-# ============================================
 networks:
   portfolio-network:
     driver: bridge
     name: portfolio-optimizer-network
 
-# ============================================
-# Volumes persistants
-# ============================================
 volumes:
   grafana_data:
   prometheus_data:
