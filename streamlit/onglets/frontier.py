@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import streamlit as st
 
-from streamlit.onglets.base import Page
-from streamlit.state import AppState, OptimizationConfig
-from streamlit.services import OptimizationService
-from streamlit.plots import PlotService
+from onglets.base import Page
+from state import AppState, OptimizationConfig
+from services import OptimizationService
+from plots import PlotService
 
 
 class FrontierPage(Page):

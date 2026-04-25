@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from streamlit.state import AppState, OptimizationConfig
+from state import AppState, OptimizationConfig
 
 
 class Page(ABC):

@@ -4,13 +4,13 @@ import streamlit as st
 from datetime import datetime, timedelta
 from typing import List
 
-from streamlit.state import AppState, OptimizationConfig
-from streamlit.onglets.data_analysis import DataAnalysisPage
-from streamlit.onglets.frontier import FrontierPage
-from streamlit.onglets.optimal import OptimalPortfoliosPage
-from streamlit.onglets.risk import RiskAnalysisPage
-from streamlit.onglets.theory import TheoryPage
-from streamlit.services import MarketDataService, SyntheticDataService
+from state import AppState, OptimizationConfig
+from onglets.data_analysis import DataAnalysisPage
+from onglets.frontier import FrontierPage
+from onglets.optimal import OptimalPortfoliosPage
+from onglets.risk import RiskAnalysisPage
+from onglets.theory import TheoryPage
+from services import MarketDataService, SyntheticDataService
 
 
 class PortfolioOptimizerApp:

@@ -7,8 +7,8 @@ import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 
-from streamlit.onglets.base import Page
-from streamlit.state import AppState, OptimizationConfig
+from onglets.base import Page
+from state import AppState, OptimizationConfig
 
 
 class DataAnalysisPage(Page):

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import streamlit as st
 
-from streamlit.onglets.base import Page
-from streamlit.state import AppState, OptimizationConfig
-from streamlit.services import OptimizationService
+from onglets.base import Page
+from state import AppState, OptimizationConfig
+from services import OptimizationService
 
 
 class RiskAnalysisPage(Page):
