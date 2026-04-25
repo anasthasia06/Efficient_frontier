@@ -1,3 +1,21 @@
+# Streamlit config et caches
+streamlit/.streamlit/
+streamlit/__pycache__/
+apps/streamlit/__pycache__/
+src/streamlit/__pycache__/
+
+# Environnement virtuel local complet (uv/venv)
+.venv/
+.venv/*
+.venv/.lock
+.venv/CACHEDIR.TAG
+.venv/lib64/
+.venv/share/
+.venv/etc/
+.venv/include/
+.venv/bin/
+.venv/pyvenv.cfg
+.venv/.gitignore
 # env
 .env
 .venv
