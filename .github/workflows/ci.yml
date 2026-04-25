@@ -1,5 +1,6 @@
 name: CI
 
+
 on:
   push:
     branches: [ main, dev_demo, Charly, Anasthasia ]
@@ -19,22 +20,19 @@ jobs:
           python-version: '3.12'
 
       - name: Install uv
-        run: |
-          pip install uv
+        run: pip install uv
 
       - name: Sync dependencies
-        run: |
-          uv sync --no-dev
+        run: uv sync --no-dev
 
-      - name: Lint with Ruff
+      - name: Lint with flake8
         run: |
-          uv pip install ruff
-          ruff streamlit
+          uv pip install flake8
+          python -m flake8 streamlit
 
-      - name: Run basic tests (import check)
-        run: |
-          python -c "import streamlit.app; import streamlit.app_oop"
+      - name: Import check
+        run: python -c "import streamlit.app; import streamlit.app_oop"
 
       - name: Build Docker image
-        run: |
-          docker build -t efficient_frontier .
+        run: docker build -t efficient_frontier .
+

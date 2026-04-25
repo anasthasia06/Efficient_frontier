@@ -17,7 +17,7 @@ Implémente les 14 points du document prog_finance_fr_v2:
 13. Algorithmes pratiques
 14. Applications
 """
-
+import os
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -355,7 +355,18 @@ def main():
         max_weight = st.slider("Poids maximum par actif", 0.2, 1.0, 0.5)
         
         num_frontier_points = st.slider("Points frontière", 20, 100, 50)
-    
+
+        # Affichage du QR code Render à la fin de la sidebar
+        # Chemin absolu pour compatibilité Docker/Streamlit
+        qrcode_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "assets", "qrcode_render.png"))
+        st.divider()
+        st.markdown("<b>Accès direct à l'application :</b>", unsafe_allow_html=True)
+        if os.path.exists(qrcode_path):
+            st.image(qrcode_path, caption="QR code accès Render", width=150)
+        else:
+            st.info("QR code non généré ou non copié dans streamlit/assets/qrcode_render.png.")
+
+
     # Onglets principaux
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "📊 Analyse des Données",
