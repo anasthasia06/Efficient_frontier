@@ -3,5 +3,5 @@
 set -e
 
 git add .
-git commit -m "vie"
+git commit -m "Trigger CI - Auto commit"
 git push
