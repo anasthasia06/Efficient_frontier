@@ -35,6 +35,9 @@ jobs:
           ruff --version
           ruff check streamlit
 
+      - name: Install runtime dependencies (numpy, pandas, scipy)
+        run: pip install numpy pandas scipy
+
       - name: Import check
         run: python -c "import streamlit.app; import streamlit.app_oop"
 
