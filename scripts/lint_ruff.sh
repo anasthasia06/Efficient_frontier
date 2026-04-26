@@ -11,5 +11,5 @@ fi
 echo "Version de ruff :"
 ruff --version
 
-echo "Lint en cours sur le dossier streamlit..."
-ruff check streamlit
+echo "Lint en cours sur le dossier app_streamlit..."
+ruff check app_streamlit

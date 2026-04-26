@@ -11,7 +11,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PYTHONPATH=/app:/app/streamlit
+	PYTHONPATH=/app:/app/app_streamlit
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	build-essential \
@@ -35,7 +35,7 @@ EXPOSE 8501
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
 	CMD curl -f http://localhost:8501/_stcore/health || exit 1
 
-CMD ["uv", "run", "streamlit", "run", "streamlit/app.py", \
+CMD ["uv", "run", "streamlit", "run", "app_streamlit/app.py", \
 	 "--server.address=0.0.0.0", \
 	 "--server.headless=true", \
 	 "--server.enableCORS=false", \

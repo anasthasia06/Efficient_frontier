@@ -33,11 +33,11 @@ jobs:
           export PATH="$HOME/.local/bin:$PATH"
           which ruff
           ruff --version
-          ruff check streamlit
+          ruff check app_streamlit
 
       - name: Build Docker image (versionnée)
         run: docker build -t efficient_frontier:latest .
 
       - name: Import check in Docker image
-        run: docker run --rm efficient_frontier:latest uv run python -c "import streamlit.app; import streamlit.app_oop"
+        run: docker run --rm efficient_frontier:latest uv run python -c "import app_streamlit.app; import app_streamlit.app_oop"
 
