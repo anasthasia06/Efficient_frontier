@@ -8,6 +8,9 @@
 # VSCode
 .vscode/
 
+# Binaire flake8 local (si installé par pip user)
+.local/bin/flake8
+
 # Caches Python
 __pycache__/
 streamlit/__pycache__/
