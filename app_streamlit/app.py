@@ -28,8 +28,7 @@ from typing import Optional, List
 import yfinance as yf
 from datetime import datetime, timedelta
 
-# Import du module d'optimisation
-from core.optimization import (
+from app_streamlit.core.optimization import (
     calculate_expected_returns,
     calculate_covariance_matrix,
     compute_efficient_frontier,
@@ -38,16 +37,25 @@ from core.optimization import (
 )
 
 
-# Configuration de la page
-st.set_page_config(
-    page_title="Portfolio Optimizer - Markowitz",
-    page_icon="📈",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# Configuration de la page (compatibilité Streamlit 1.56+)
+try:
+    st.set_page_config(
+        page_title="Portfolio Optimizer - Markowitz",
+        page_icon="📈",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
+except AttributeError:
+    # Pour Streamlit >=1.56 où l'API a changé
+    if hasattr(st, "page_config"):
+        st.page_config(
+            page_title="Portfolio Optimizer - Markowitz",
+            page_icon="📈",
+            layout="wide",
+            initial_sidebar_state="expanded"
+        )
 
 
-# Style CSS personnalisé (thème clair par défaut)
 try:
     with open("assets/styles-light.css", "r", encoding="utf-8") as f:
         css = f.read()

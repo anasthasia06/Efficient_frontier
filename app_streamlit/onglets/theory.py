@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import streamlit as st
 
-from onglets.base import Page
-from state import AppState, OptimizationConfig
+from app_streamlit.onglets.base import Page
+from app_streamlit.state import AppState, OptimizationConfig
 
 
 class TheoryPage(Page):

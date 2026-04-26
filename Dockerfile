@@ -28,7 +28,7 @@ RUN uv sync \
 	&& uv pip list
 
 # Copie le code de l'app (y compris core)
-COPY streamlit/ ./streamlit/
+	COPY app_streamlit/ ./app_streamlit/
 
 EXPOSE 8501
 

@@ -9,7 +9,7 @@ import pandas as pd
 import streamlit as st
 import yfinance as yf
 
-from core.optimization import (
+from app_streamlit.core.optimization import (
     calculate_expected_returns,
     calculate_covariance_matrix,
     compute_efficient_frontier,
