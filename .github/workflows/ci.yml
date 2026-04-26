@@ -28,8 +28,10 @@ jobs:
       - name: Lint with flake8
         run: |
           uv pip install flake8
-          python -c "import flake8; print('flake8 importé avec succès')"
-          python -m flake8 streamlit
+          export PATH="$HOME/.local/bin:$PATH"
+          which flake8
+          flake8 --version
+          flake8 streamlit
 
       - name: Import check
         run: python -c "import streamlit.app; import streamlit.app_oop"
