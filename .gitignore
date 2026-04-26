@@ -49,3 +49,7 @@ cython_debug/
 
 src/
 apps/
+
+# linting
+*.log
+.ruff_cache/
