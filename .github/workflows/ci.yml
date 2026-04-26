@@ -35,10 +35,9 @@ jobs:
           ruff --version
           ruff check streamlit
 
-
-      - name: Import check
-        run: python -c "import streamlit.app; import streamlit.app_oop"
-
       - name: Build Docker image
         run: docker build -t efficient_frontier .
+
+      - name: Import check in Docker image
+        run: docker run --rm efficient_frontier python -c "import streamlit.app; import streamlit.app_oop"
 
