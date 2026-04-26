@@ -23,6 +23,9 @@ dependencies = [
     "bcrypt>=4.1.0",
     "pyjwt>=2.8.0",
     "sqlalchemy>=2.0.25",
+    "dataclasses; python_version<'3.7'",
+    "typing-extensions",
+    "core",  # si core est un package externe sinon à ignorer
 ]
 
 [project.optional-dependencies]
