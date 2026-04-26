@@ -25,7 +25,6 @@ dependencies = [
     "sqlalchemy>=2.0.25",
     "dataclasses; python_version<'3.7'",
     "typing-extensions",
-    "core",  # si core est un package externe sinon à ignorer
 ]
 
 [project.optional-dependencies]
