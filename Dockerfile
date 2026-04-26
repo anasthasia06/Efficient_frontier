@@ -4,12 +4,14 @@ FROM python:3.12-slim
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-	PYTHONUNBUFFERED=1 \
-	STREAMLIT_SERVER_PORT=8501 \
-	STREAMLIT_SERVER_HEADLESS=true \
-	STREAMLIT_BROWSER_GATHER_USAGE_STATS=false \
-	UV_COMPILE_BYTECODE=1 \
-	UV_LINK_MODE=copy
+    PYTHONUNBUFFERED=1 \
+    STREAMLIT_SERVER_PORT=8501 \
+    STREAMLIT_SERVER_HEADLESS=true \
+    STREAMLIT_BROWSER_GATHER_USAGE_STATS=false \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONPATH=/app:/app/streamlit
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	build-essential \
@@ -22,9 +24,10 @@ WORKDIR /app
 COPY pyproject.toml uv.lock* README.md ./
 
 # Installe les dépendances dans .venv avec uv
-RUN uv sync 
+RUN uv sync \
+	&& uv pip list
 
-# Copie le code de l'app
+# Copie le code de l'app (y compris core)
 COPY streamlit/ ./streamlit/
 
 EXPOSE 8501

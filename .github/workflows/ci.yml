@@ -39,5 +39,5 @@ jobs:
         run: docker build -t efficient_frontier:latest .
 
       - name: Import check in Docker image
-        run: docker run --rm efficient_frontier:latest python -c "import streamlit.app; import streamlit.app_oop"
+        run: docker run --rm efficient_frontier:latest uv run python -c "import streamlit.app; import streamlit.app_oop"
 

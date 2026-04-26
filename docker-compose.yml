@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: efficient_frontier:lastest
+    image: efficient_frontier:latest
     restart: unless-stopped
     ports:
       - "8501:8501"
