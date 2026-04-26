@@ -25,13 +25,13 @@ jobs:
       - name: Sync dependencies
         run: uv sync --no-dev
 
-      - name: Lint with flake8
+      - name: Lint with ruff
         run: |
-          uv pip install flake8
+          uv pip install ruff
           export PATH="$HOME/.local/bin:$PATH"
-          which flake8
-          flake8 --version
-          flake8 streamlit
+          which ruff
+          ruff --version
+          ruff check streamlit
 
       - name: Import check
         run: python -c "import streamlit.app; import streamlit.app_oop"

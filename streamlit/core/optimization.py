@@ -12,8 +12,8 @@ Ce module fournit les fonctions mathématiques pour:
 
 import numpy as np
 from numpy.typing import NDArray
-from scipy.optimize import minimize, OptimizeResult
-from typing import Tuple, Optional, Dict, List, NamedTuple
+from scipy.optimize import minimize
+from typing import Optional, Dict, List
 from dataclasses import dataclass
 
 

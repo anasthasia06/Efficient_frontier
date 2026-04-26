@@ -24,23 +24,17 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from typing import Optional, List, Dict
+from typing import Optional, List
 import yfinance as yf
 from datetime import datetime, timedelta
 
 # Import du module d'optimisation
 from core.optimization import (
-    calculate_returns,
     calculate_expected_returns,
     calculate_covariance_matrix,
-    calculate_correlation_matrix,
-    calculate_portfolio_metrics,
     compute_efficient_frontier,
-    optimize_min_variance,
-    optimize_max_sharpe,
     calculate_var,
-    calculate_cvar,
-    calculate_statistical_moments
+    calculate_cvar
 )
 
 
