@@ -2,7 +2,6 @@
 # Orchestration des conteneurs pour la landing page et l'application Streamlit
 
  
-
 services:
 
 
@@ -13,6 +12,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: efficient_frontier:lastest
     restart: unless-stopped
     ports:
       - "8501:8501"

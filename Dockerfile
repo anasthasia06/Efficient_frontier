@@ -22,7 +22,7 @@ WORKDIR /app
 COPY pyproject.toml uv.lock* README.md ./
 
 # Installe les dépendances dans .venv avec uv
-RUN uv sync --frozen --no-dev
+RUN uv sync 
 
 # Copie le code de l'app
 COPY streamlit/ ./streamlit/
