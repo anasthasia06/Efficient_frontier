@@ -46,9 +46,8 @@ try:
         initial_sidebar_state="expanded"
     )
 except AttributeError:
-    # Pour Streamlit >=1.56 où l'API a changé
     if hasattr(st, "page_config"):
-        st.page_config(
+        st.set_page_config(
             page_title="Portfolio Optimizer - Markowitz",
             page_icon="📈",
             layout="wide",

@@ -44,4 +44,4 @@ class OptimizationConfig:
     min_weight: float = 0.0
     max_weight: float = 0.5
     num_frontier_points: int = 50
-    theme: str = "dark"  # "dark" ou "light"
+    theme: str = "light"  # "dark" ou "light"

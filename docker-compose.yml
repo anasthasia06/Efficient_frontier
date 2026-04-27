@@ -32,6 +32,8 @@ services:
       start_period: 30s
     networks:
       - portfolio-network
+    dns:
+      - 8.8.8.8
     labels:
       - "app.name=portfolio-optimizer-streamlit"
       - "app.description=Application Streamlit pour optimisation de portefeuille"

@@ -96,15 +96,16 @@ def calculate_covariance_matrix(returns: NDArray[np.float64]) -> NDArray[np.floa
 
 def calculate_correlation_matrix(cov_matrix: NDArray[np.float64]) -> NDArray[np.float64]:
     """
-    Calcule la matrice de corrélation à partir de la matrice de covariance.
-    
-    ρ_{i,j} = Σ_{i,j} / (σ_i × σ_j)
-    
-    Args:
-        cov_matrix: Matrice de covariance (N x N)
+        Calcule la matrice de corrélation à partir de la matrice de covariance.
         
-    Returns:
-        Matrice de corrélation (N x N)
+        ρ_{i,j} = Σ_{i,j} / (σ_i × σ_j)
+        
+        Args:
+            cov_matrix: Matrice de covariance (N x N)
+            
+        Returns:
+            Matrice de corrélation (N x N)
+
     """
     std_devs = np.sqrt(np.diag(cov_matrix))
     outer_std = np.outer(std_devs, std_devs)
@@ -117,25 +118,25 @@ def calculate_portfolio_metrics(
     cov_matrix: NDArray[np.float64],
     risk_free_rate: float = 0.0
 ) -> PortfolioMetrics:
-    """
-    Calcule les métriques d'un portefeuille.
-    
-    Point 4 du document:
-    - Rendement espéré: μ_p = w'μ = Σ w_i × μ_i
-    - Variance: σ²_p = w'Σw
-    - Volatilité: σ_p = √(w'Σw)
-    
-    Point 9: Ratio de Sharpe
-    - S = (μ_p - r_f) / σ_p
-    
-    Args:
-        weights: Vecteur des poids (N,)
-        expected_returns: Vecteur des rendements espérés (N,)
-        cov_matrix: Matrice de covariance (N x N)
-        risk_free_rate: Taux sans risque r_f
+    """ 
+        Calcule les métriques d'un portefeuille.
         
-    Returns:
-        PortfolioMetrics avec toutes les métriques calculées
+        Point 4 du document:
+        - Rendement espéré: μ_p = w'μ = Σ w_i × μ_i
+        - Variance: σ²_p = w'Σw
+        - Volatilité: σ_p = √(w'Σw)
+        
+        Point 9: Ratio de Sharpe
+        - S = (μ_p - r_f) / σ_p
+        
+        Args:
+            weights: Vecteur des poids (N,)
+            expected_returns: Vecteur des rendements espérés (N,)
+            cov_matrix: Matrice de covariance (N x N)
+            risk_free_rate: Taux sans risque r_f
+            
+        Returns:
+            PortfolioMetrics avec toutes les métriques calculées
     """
     # Rendement espéré du portefeuille
     port_return = np.dot(weights, expected_returns)
