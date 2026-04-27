@@ -1,6 +1,6 @@
 name: CD Render
 
-# Ce workflow déploie un service Render après le succès de la CI sur la branche main.
+# Ce workflow déploie un service Render après le succès de la CI sur la branche Charly.
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -8,13 +8,13 @@ env:
 on:
   workflow_run:
     workflows:
-      - CI # Remplace par le nom exact de ton workflow CI si besoin
+      - CI 
     types:
       - completed
 
 jobs:
   deploy-render:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'Charly' }}
     runs-on: ubuntu-latest
     steps:
       - name: Déployer le service Render
