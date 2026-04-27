@@ -5,7 +5,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    STREAMLIT_SERVER_PORT=8501 \
+    STREAMLIT_SERVER_PORT=8502 \
     STREAMLIT_SERVER_HEADLESS=true \
     STREAMLIT_BROWSER_GATHER_USAGE_STATS=false \
     UV_COMPILE_BYTECODE=1 \
@@ -30,10 +30,10 @@ RUN uv sync \
 # Copie le code de l'app (y compris core)
 	COPY app_streamlit/ ./app_streamlit/
 
-EXPOSE 8501
+EXPOSE 8502
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-	CMD curl -f http://localhost:8501/_stcore/health || exit 1
+	CMD curl -f http://localhost:8502/_stcore/health || exit 1
 
 CMD ["uv", "run", "streamlit", "run", "app_streamlit/app.py", \
 	 "--server.address=0.0.0.0", \

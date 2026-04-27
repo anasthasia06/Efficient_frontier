@@ -246,8 +246,6 @@ def optimize_max_sharpe(
     """
     Trouve le portefeuille tangent (maximum ratio de Sharpe).
  
-    Point 9-10 du document:
- 
     max  (w'μ - r_f) / √(w'Σw)
     s.t. Σw_i = 1
          w_min ≤ w_i ≤ w_max

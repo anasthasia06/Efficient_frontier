@@ -20,31 +20,43 @@ class DataAnalysisPage(Page):
             return
 
         returns_df = state.returns_df
-        col1, col2 = st.columns(2)
-        with col1:
-            st.subheader("📈 Statistiques Descriptives")
-            stats_df = pd.DataFrame({
-                'Rendement annualisé (%)': returns_df.mean() * 252 * 100,
-                'Volatilité annualisée (%)': returns_df.std() * np.sqrt(252) * 100,
-                'Sharpe (r_f=2%)': (returns_df.mean() * 252 - 0.02) / (returns_df.std() * np.sqrt(252)),
-                'Skewness': returns_df.skew(),
-                'Kurtosis': returns_df.kurtosis()
-            }).round(3)
-            st.dataframe(stats_df, width="stretch")
-        with col2:
-            st.subheader("🔗 Matrice de Corrélation")
-            corr_matrix = returns_df.corr()
-            fig = px.imshow(
-                corr_matrix,
-                labels=dict(color="Corrélation"),
-                color_continuous_scale='RdBu_r',
-                zmin=-1, zmax=1
-            )
-            if config.theme == "dark":
-                fig.update_layout(template='plotly_dark', paper_bgcolor='#16213e')
-            else:
-                fig.update_layout(template='plotly', paper_bgcolor='#ffffff')
-            st.plotly_chart(fig, config={"responsive": True})
+
+        # Statistiques descriptives
+        st.subheader("📈 Statistiques Descriptives")
+        stats_df = pd.DataFrame({
+            'Rendement annualisé (%)': returns_df.mean() * 252 * 100,
+            'Volatilité annualisée (%)': returns_df.std() * np.sqrt(252) * 100,
+            'Sharpe (r_f=2%)': (returns_df.mean() * 252 - 0.02) / (returns_df.std() * np.sqrt(252)),
+            'Skewness': returns_df.skew(),
+            'Kurtosis': returns_df.kurtosis()
+        }).round(3)
+        st.dataframe(stats_df, width="stretch")
+
+        # Matrice de corrélation juste en dessous
+        st.subheader("🔗 Matrice de Corrélation")
+        corr_matrix = returns_df.corr()
+        fig_corr = px.imshow(
+            corr_matrix,
+            labels=dict(color="Corrélation"),
+            color_continuous_scale='RdBu_r',
+            zmin=-1, zmax=1
+        )
+        if config.theme == "dark":
+            fig_corr.update_layout(template='plotly_dark', paper_bgcolor='#16213e')
+        else:
+            fig_corr.update_layout(template='plotly', paper_bgcolor='#ffffff')
+        st.plotly_chart(fig_corr, config={"responsive": True})
+
+        # Matrice diagonalisee (valeurs propres/vecteurs propres)
+        st.subheader("Matrice Diagonalisée (Poids des actifs propres)")
+        # Diagonalisation de la matrice de corrélation
+        eigvals, eigvecs = np.linalg.eigh(corr_matrix.values)
+        # On affiche les valeurs propres (poids des axes principaux)
+        eigvals_sorted = np.flip(np.sort(eigvals))
+        eigvecs_sorted = eigvecs[:, np.flip(np.argsort(eigvals))]
+        poids_df = pd.DataFrame(eigvecs_sorted, columns=[f"Axe {i+1} (λ={eigvals_sorted[i]:.2f})" for i in range(len(eigvals_sorted))], index=corr_matrix.index)
+        st.dataframe(poids_df.round(3), width="stretch")
+        st.info("La frontière efficiente sera construite sur la base des actifs propres (axes principaux) issus de la diagonalisation de la matrice de corrélation.")
 
         st.subheader("📊 Distribution des Rendements")
         selected_asset = st.selectbox("Sélectionner un actif", state.selected_assets)
